@@ -1,1 +1,0 @@
-INSERT INTO pato (nome) VALUES ('pato')
