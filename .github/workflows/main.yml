@@ -34,6 +34,19 @@ jobs:
           push: false                  # Não envia para Docker Hub/GHCR, só build local
           tags: api-springboot:latest
 
+
+      # 4️⃣ Copia o .jar e Dockerfile para a VM
+      - name: Copiar artefatos para a VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: "130.107.74.13"
+          username: "kaique-ssh"
+          key_path: "./id_rsa_azure.pem"
+          source: |
+            target/*.jar
+            Dockerfile
+          target: "/home/kaique-ssh/app"
+
       # 5️⃣ Copia a imagem Docker e o jar para a VM via SSH
       - name: Deploy Docker na VM
         uses: appleboy/ssh-action@v1.1.0

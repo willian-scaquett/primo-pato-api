@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,7 +22,7 @@ public class Estado {
     @Column(nullable = false)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     String nome;
 
     @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -29,4 +30,8 @@ public class Estado {
 
     @ManyToOne(targetEntity = Pais.class, fetch = FetchType.LAZY)
     private Pais pais;
+
+    public List<Cidade> getCidades() {
+        return cidades != null ? cidades : new ArrayList<>();
+    }
 }
