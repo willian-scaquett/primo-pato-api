@@ -34,6 +34,8 @@ jobs:
           push: false                  # Não envia para Docker Hub/GHCR, só build local
           tags: api-springboot:latest
 
+      - name: Debug arquivos
+        run: ls -l target/ Dockerfile
 
       # 4️⃣ Copia o .jar e Dockerfile para a VM
       - name: Copiar artefatos para a VM
