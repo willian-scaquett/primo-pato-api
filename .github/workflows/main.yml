@@ -53,5 +53,5 @@ jobs:
           echo "Parando aplicação anterior..."
           pkill -f 'java -jar' || true
           echo "Iniciando nova versão..."
-          nohup java -jar /home/kaique-ssh/app/*.jar > app.log 2>&1 &
+          nohup java -jar /home/kaique-ssh/app/*.jar > /home/kaique-ssh/app/app.log 2>&1 & disown
           echo "API iniciada com sucesso!"
