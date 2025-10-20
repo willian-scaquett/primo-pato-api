@@ -50,19 +50,19 @@ jobs:
         key_path: "./id_rsa_azure.pem"
         script: |
           echo "====== Reinício da API ======"
-          
-          # 1️⃣ Parar qualquer instância anterior
+
+          # 1️⃣ Parar qualquer instância anterior sem gerar erro
           echo "Parando aplicação anterior..."
-          pkill -f 'java -jar' || echo "Nenhuma aplicação anterior encontrada"
-          
-          # 2️⃣ Dar um pequeno delay para garantir que o processo anterior foi finalizado
+          pkill -f 'java -jar' || true
+
+          # 2️⃣ Pequeno delay
           sleep 2
-          
+
           # 3️⃣ Iniciar nova versão em background
           echo "Iniciando nova versão..."
           java -jar /home/kaique-ssh/app/target/*.jar > /home/kaique-ssh/app/app.log 2>&1 & disown
-          
-          # 4️⃣ Esperar alguns segundos e verificar se o processo subiu
+
+          # 4️⃣ Verificar se o processo subiu
           sleep 5
           if pgrep -f 'java -jar' > /dev/null; then
               echo "✅ API iniciada com sucesso!"
