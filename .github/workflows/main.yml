@@ -42,7 +42,6 @@ jobs:
         source: "target/*.jar"
         target: "/home/kaique-ssh/app" # pasta destino na VM
 
-    # 6️⃣ Conecta na VM e reinicia a aplicação
     - name: Reiniciar API na VM
       uses: appleboy/ssh-action@v1.1.0
       with:
@@ -50,8 +49,25 @@ jobs:
         username: "kaique-ssh"
         key_path: "./id_rsa_azure.pem"
         script: |
+          echo "====== Reinício da API ======"
+          
+          # 1️⃣ Parar qualquer instância anterior
           echo "Parando aplicação anterior..."
-          pkill -f 'java -jar' || true
+          pkill -f 'java -jar' || echo "Nenhuma aplicação anterior encontrada"
+          
+          # 2️⃣ Dar um pequeno delay para garantir que o processo anterior foi finalizado
+          sleep 2
+          
+          # 3️⃣ Iniciar nova versão em background
           echo "Iniciando nova versão..."
           java -jar /home/kaique-ssh/app/target/*.jar > /home/kaique-ssh/app/app.log 2>&1 & disown
-          echo "API iniciada com sucesso!"
+          
+          # 4️⃣ Esperar alguns segundos e verificar se o processo subiu
+          sleep 5
+          if pgrep -f 'java -jar' > /dev/null; then
+              echo "✅ API iniciada com sucesso!"
+              echo "Logs disponíveis em /home/kaique-ssh/app/app.log"
+          else
+              echo "❌ Falha ao iniciar a API! Verifique o app.log"
+              exit 1
+          fi
