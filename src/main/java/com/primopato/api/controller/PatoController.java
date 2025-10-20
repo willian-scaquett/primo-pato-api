@@ -1,5 +1,6 @@
 package com.primopato.api.controller;
 
+import com.primopato.api.entity.Pato;
 import com.primopato.api.record.PatoRequest;
 import com.primopato.api.service.PatoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato cadastrado com sucesso")
     })
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrarPato(@PathVariable PatoRequest patoRequest) {
+    public ResponseEntity<Pato> cadastrarPato(@PathVariable PatoRequest patoRequest) {
         return ResponseEntity.ok(patoService.cadastrar(patoRequest));
     }
 }

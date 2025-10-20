@@ -1,9 +1,12 @@
 package com.primopato.api.entity;
 
 import com.primopato.api.enumerated.EstadoHibernacao;
+import com.primopato.api.utils.LocalizacaoUtils;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -42,5 +45,4 @@ public class Pato {
 
     @ManyToOne(targetEntity = SuperPoder.class, fetch = FetchType.LAZY)
     private SuperPoder superPoder;
-
 }
