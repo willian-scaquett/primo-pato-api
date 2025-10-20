@@ -1,7 +1,9 @@
 package com.primopato.api.controller;
 
-import com.primopato.api.entity.Pato;
+import com.primopato.api.enumerated.EstadoHibernacao;
+import com.primopato.api.record.DropDownResponse;
 import com.primopato.api.record.PatoRequest;
+import com.primopato.api.record.PatoResponse;
 import com.primopato.api.service.PatoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,21 +22,59 @@ public class PatoController {
 
     private final PatoService patoService;
 
-    @Operation(summary = "Endpoint teste")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "A API está bem")
-    })
-    @GetMapping("/teste/{teste}")
-    public ResponseEntity<String> teste(@PathVariable String teste) {
-        return ResponseEntity.ok(teste);
-    }
-
     @Operation(summary = "Endpoint para cadastro de patos primordiais")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pato cadastrado com sucesso")
     })
     @PostMapping("/cadastrar")
-    public ResponseEntity<Pato> cadastrarPato(@PathVariable PatoRequest patoRequest) {
+    public ResponseEntity<PatoResponse> cadastrarPato(@RequestBody PatoRequest patoRequest) {
         return ResponseEntity.ok(patoService.cadastrar(patoRequest));
     }
+
+    @Operation(summary = "Endpoint para edição de patos primordiais")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
+    })
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<PatoResponse> editarPato(@PathVariable Long id, @RequestBody PatoRequest patoRequest) {
+        return ResponseEntity.ok(patoService.editar(id, patoRequest));
+    }
+
+    @Operation(summary = "Endpoint para apagar patos primordiais")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pato apagado com sucesso")
+    })
+    @DeleteMapping("/apagar/{id}")
+    public ResponseEntity<?> apagarPato(@PathVariable Long id) {
+        patoService.apagar(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Endpoint para buscar pato primordial por id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pato buscado com sucesso")
+    })
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<PatoRequest> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(patoService.buscarPorId(id));
+    }
+
+    @Operation(summary = "Endpoint para buscar patos primordiais")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Patos buscados com sucesso")
+    })
+    @GetMapping("/buscar")
+    public ResponseEntity<List<PatoResponse>> buscarTodosFiltrado(@RequestParam(required = false, defaultValue = "") String filtro) {
+        return ResponseEntity.ok(patoService.buscarTodosFiltrado(filtro));
+    }
+
+    @Operation(summary = "Endpoint para carregar estados de hibernação")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Estados de hibernação carregados com sucesso")
+    })
+    @GetMapping("/estadohibernacao/carregar")
+    public ResponseEntity<List<DropDownResponse>> carregarEstadosHibernacao() {
+        return ResponseEntity.ok(patoService.carregarEstadosHibernacao());
+    }
+
 }

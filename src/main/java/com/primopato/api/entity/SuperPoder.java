@@ -2,9 +2,11 @@ package com.primopato.api.entity;
 
 import com.primopato.api.enumerated.TipoSuperPoder;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@Data
 @Entity
 public class SuperPoder {
 
