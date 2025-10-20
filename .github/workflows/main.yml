@@ -44,7 +44,7 @@ jobs:
           key_path: "./id_rsa_azure.pem"
           source: |
             target/*.jar
-            Dockerfile
+            ./Dockerfile
           target: "/home/kaique-ssh/app"
 
       # 5️⃣ Copia a imagem Docker e o jar para a VM via SSH
