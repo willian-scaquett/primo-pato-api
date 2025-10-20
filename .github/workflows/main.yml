@@ -36,22 +36,22 @@ jobs:
     - name: Copiar artefato para a VM Azure
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.AZURE_VM_IP }}          # IP público da sua VM
-        username: ${{ secrets.AZURE_VM_USER }}    # usuário da VM
-        key: ${{ secrets.AZURE_SSH_KEY }}         # chave privada SSH (ver instruções abaixo)
+        host: "130.107.74.13"          # IP público da sua VM
+        username: "kaique-ssh"         # usuário da VM
+        key_path: "./id_rsa_azure.pem" # chave privada SSH (ver instruções abaixo)
         source: "target/*.jar"
-        target: "/home/${{ secrets.AZURE_VM_USER }}/app" # pasta destino na VM
+        target: "/home/kaique-ssh/app" # pasta destino na VM
 
     # 6️⃣ Conecta na VM e reinicia a aplicação
     - name: Reiniciar API na VM
       uses: appleboy/ssh-action@v1.1.0
       with:
-        host: ${{ secrets.AZURE_VM_IP }}
-        username: ${{ secrets.AZURE_VM_USER }}
-        key: ${{ secrets.AZURE_SSH_KEY }}
+        host: "130.107.74.13"
+        username: "kaique-ssh"
+        key_path: "./id_rsa_azure.pem"
         script: |
           echo "Parando aplicação anterior..."
           pkill -f 'java -jar' || true
           echo "Iniciando nova versão..."
-          nohup java -jar /home/${{ secrets.AZURE_VM_USER }}/app/*.jar > app.log 2>&1 &
+          nohup java -jar /home/kaique-ssh/app/*.jar > app.log 2>&1 &
           echo "API iniciada com sucesso!"
