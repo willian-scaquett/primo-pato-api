@@ -1,6 +1,10 @@
 package com.primopato.api.utils;
 
-public class CoordenadasUtils {
+import com.primopato.api.entity.Pais;
+
+public class LocalizacaoUtils {
+
+    public final static Pais EUA = new Pais("ESTADOS UNIDOS");
 
     public static double distanciaKmEntreCoordenadas(double lat1, double lon1, double lat2, double lon2) {
         final double RAIO_TERRA_KM = 6371.0;

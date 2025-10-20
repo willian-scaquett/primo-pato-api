@@ -1,22 +1,19 @@
 package com.primopato.api.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Objects;
 
+@Data
 @Entity
 public class Localizacao {
 
-    @Id
-    @Column(nullable = false)
-    private Double latitude;
-
-    @Id
-    @Column(nullable = false)
-    private Double longitude;
+    @EmbeddedId
+    private Coordenadas coordenadas;
 
     @Column
-    private String enderecoSuperPoder;
+    private String endereco;
 
     @Column
     private String pontoReferencia;
@@ -28,11 +25,11 @@ public class Localizacao {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Localizacao that = (Localizacao) o;
-        return Objects.equals(latitude, that.latitude) && Objects.equals(longitude, that.longitude);
+        return Objects.equals(coordenadas, that.coordenadas);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(latitude, longitude);
+        return Objects.hash(coordenadas);
     }
 }

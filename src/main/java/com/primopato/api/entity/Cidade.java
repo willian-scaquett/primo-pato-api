@@ -1,9 +1,18 @@
 package com.primopato.api.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 @Entity
 public class Cidade {
+
+    public Cidade(String nome, Estado estado) {
+        this.nome = nome;
+        this.estado = estado;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

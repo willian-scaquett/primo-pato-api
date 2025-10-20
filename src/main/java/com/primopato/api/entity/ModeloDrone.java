@@ -1,9 +1,18 @@
 package com.primopato.api.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 @Entity
 public class ModeloDrone {
+
+    public ModeloDrone(String nome, FabricanteDrone fabricante) {
+        this.nome = nome;
+        this.fabricante = fabricante;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
