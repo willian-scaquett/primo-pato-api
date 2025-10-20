@@ -48,7 +48,7 @@ jobs:
       with:
         host: "130.107.74.13"
         username: "kaique-ssh"
-        key_path: "./id_rsa_azure.pem
+        key_path: "./id_rsa_azure.pem"
         script: |
           echo "Parando aplicação anterior..."
           pkill -f 'java -jar' || true
