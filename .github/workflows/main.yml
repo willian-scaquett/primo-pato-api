@@ -10,64 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Faz checkout do código
-    - name: Checkout código
-      uses: actions/checkout@v4
+      # 1️⃣ Faz checkout do código
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-    # 2️⃣ Configura o JDK
-    - name: Configurar JDK 21
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin' # pode ser adopt, temurin, zulu, etc.
-        java-version: '21'
+      # 2️⃣ Configura o JDK
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # pode ser adopt, temurin, zulu, etc.
+          java-version: '21'
 
-    # 3️⃣ Compila e empacota o projeto
-    - name: Compilar projeto com Maven
-      run: mvn clean package -DskipTests
+      # 3️⃣ Compila e empacota o projeto
+      - name: Compilar projeto com Maven
+        run: mvn clean package -DskipTests
 
-    # 4️⃣ Armazena o .jar gerado como artefato (opcional)
-    - name: Upload artefato gerado
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-jar
-        path: target/*.jar
+      # 4️⃣ Armazena o .jar gerado como artefato (opcional)
+      - name: Upload artefato gerado
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
 
-    # 5️⃣ Copia o .jar para a VM no Azure via SSH/SCP
-    - name: Copiar artefato para a VM Azure
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: "130.107.74.13"          # IP público da sua VM
-        username: "kaique-ssh"         # usuário da VM
-        key_path: "./id_rsa_azure.pem" # chave privada SSH (ver instruções abaixo)
-        source: "target/*.jar"
-        target: "/home/kaique-ssh/app" # pasta destino na VM
-
-    - name: Reiniciar API na VM
-      uses: appleboy/ssh-action@v1.1.0
-      with:
-        host: "130.107.74.13"
-        username: "kaique-ssh"
-        key_path: "./id_rsa_azure.pem"
-        script: |
-          echo "====== Reinício da API ======"
-
-          # 1️⃣ Parar qualquer instância anterior sem gerar erro
-          echo "Parando aplicação anterior..."
-          pkill -f 'java -jar' || true
-
-          # 2️⃣ Pequeno delay
-          sleep 2
-
-          # 3️⃣ Iniciar nova versão em background
-          echo "Iniciando nova versão..."
-          java -jar /home/kaique-ssh/app/target/*.jar > /home/kaique-ssh/app/app.log 2>&1 & disown
-
-          # 4️⃣ Verificar se o processo subiu
-          sleep 5
-          if pgrep -f 'java -jar' > /dev/null; then
-              echo "✅ API iniciada com sucesso!"
-              echo "Logs disponíveis em /home/kaique-ssh/app/app.log"
-          else
-              echo "❌ Falha ao iniciar a API! Verifique o app.log"
-              exit 1
-          fi
+      # 5️⃣ Copia o .jar para a VM no Azure via SSH/SCP
+      - name: Build e Deploy Docker na VM
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: "130.107.74.13"
+          username: "kaique-ssh"
+          key_path: "./id_rsa_azure.pem"
+          script: |
+            cd /home/kaique-ssh/app
+            docker stop api-springboot || true
+            docker rm api-springboot || true
+            docker build -t api-springboot:latest .
+            docker run -d --name api-springboot -p 8080:8080 api-springboot:latest
