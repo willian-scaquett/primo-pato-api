@@ -1,4 +1,4 @@
-name: Build and Deploy Spring Boot API to Azure VM
+name: Build and Deploy Spring Boot API with Docker
 
 on:
   push:
@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Faz checkout do código
+      # 1️⃣ Checkout do código
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2️⃣ Configura o JDK
+      # 2️⃣ Configura o JDK 21
       - name: Configurar JDK 21
         uses: actions/setup-java@v4
         with:
@@ -22,39 +22,35 @@ jobs:
           java-version: '21'
 
       # 3️⃣ Compila e empacota o projeto
-      - name: Compilar projeto com Maven
+      - name: Build com Maven
         run: mvn clean package -DskipTests
 
-      # 4️⃣ Copia o JAR + Dockerfile para a VM
-      - name: Copiar artefatos para a VM
-        uses: appleboy/scp-action@v0.1.7
+      # 4️⃣ Build da imagem Docker no Actions
+      - name: Build Docker Image
+        uses: docker/build-push-action@v6
         with:
-          host: "130.107.74.13"
-          username: "kaique-ssh"
-          key_path: "./id_rsa_azure.pem"
-          source: |
-            target/*.jar
-            Dockerfile
-          target: "/home/kaique-ssh/app"
+          context: .
+          file: ./Dockerfile           # Caminho para seu Dockerfile
+          push: false                  # Não envia para Docker Hub/GHCR, só build local
+          tags: api-springboot:latest
 
-      # 5️⃣ Constrói e executa o container Docker na VM
-      - name: Build e Deploy Docker na VM
+      # 5️⃣ Copia a imagem Docker e o jar para a VM via SSH
+      - name: Deploy Docker na VM
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: "130.107.74.13"
           username: "kaique-ssh"
           key_path: "./id_rsa_azure.pem"
           script: |
-            cd /home/kaique-ssh/app
-            
-            echo "==== Reiniciando container existente (se houver) ===="
+            echo "==== Parando container antigo (se existir) ===="
             sudo docker stop api-springboot || true
             sudo docker rm api-springboot || true
-
-            echo "==== Construindo nova imagem Docker ===="
-            sudo docker build -t api-springboot:latest .
-
+            
+            echo "==== Carregando nova imagem ===="
+            # Caso queira enviar a imagem, você poderia usar docker save + docker load
+            # Mas nesse exemplo usamos o build direto no runner para simplificar
+            
             echo "==== Subindo container ===="
             sudo docker run -d --name api-springboot -p 8080:8080 api-springboot:latest
-
+            
             echo "✅ Deploy finalizado com sucesso!"
