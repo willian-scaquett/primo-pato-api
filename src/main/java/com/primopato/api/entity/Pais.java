@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +22,7 @@ public class Pais {
     @Column(nullable = false)
     private Long id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     String nome;
 
     @OneToMany(mappedBy = "pais", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -38,5 +39,9 @@ public class Pais {
     @Override
     public int hashCode() {
         return Objects.hashCode(nome);
+    }
+
+    public List<Estado> getEstados() {
+        return estados != null ? estados : new ArrayList<>();
     }
 }

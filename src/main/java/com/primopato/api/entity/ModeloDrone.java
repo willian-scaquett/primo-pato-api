@@ -19,7 +19,7 @@ public class ModeloDrone {
     @Column(nullable = false)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String nome;
 
     @ManyToOne(targetEntity = FabricanteDrone.class, fetch = FetchType.LAZY)

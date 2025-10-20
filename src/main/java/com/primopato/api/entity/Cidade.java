@@ -19,7 +19,7 @@ public class Cidade {
     @Column(nullable = false)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     String nome;
 
     @ManyToOne(targetEntity = Estado.class, fetch = FetchType.LAZY)
