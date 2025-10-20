@@ -36,14 +36,8 @@ jobs:
           host: "130.107.74.13"
           username: "kaique-ssh"
           key_path: "./id_rsa_azure.pem"
-          source: |
-            "target/*.jar"
-            "./Dockerfile"
-            "./docker-compose.yml"
+          source: "."
           target: "~/app"
-          rm: true
-          overwrite: true
-          strip_components: 2
 
       # 6️⃣ Deploy via Docker Compose na VM
       - name: Deploy Docker Compose na VM
