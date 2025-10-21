@@ -35,7 +35,7 @@ public class Pato {
     private EstadoHibernacao estadoHibernacao;
 
     @Column
-    private Integer bpm;
+    private Integer bpm = 0;
 
     @Column(nullable = false)
     private Integer quantidadeMutacoes;

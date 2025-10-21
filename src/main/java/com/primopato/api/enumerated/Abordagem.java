@@ -6,15 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Abordagem {
-    AGUA("Água"),
-    FOGO("Fogo"),
-    ELETRICIDADE("Eletricidade"),
-    CALOR("Calor"),
-    VELOCIDADE("Velocidade"),
-    TELETRANSPORTE("Teletransporte"),
-    PSIQUICO("Psíquico"),
-    SOBRENATURAL("Sobrenatural"),
-    OUTRO("Outro");
+    FURTIVO("Furtivo"),
+    COMEDIDO("Comedido"),
+    COMBATIVO("Combativo");
 
     private final String nome;
 }

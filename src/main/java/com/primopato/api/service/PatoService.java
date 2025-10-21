@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -21,16 +22,11 @@ public class PatoService {
     private final PatoAssembler patoAssembler;
 
     public PatoResponse cadastrar(PatoRequest request) {
-        Pato pato = patoAssembler.montarPato(request, null);
-        return new PatoResponse(patoRepository.saveAndFlush(pato));
+        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, null)));
     }
 
     public PatoResponse editar(Long id, PatoRequest request) {
-        Pato patoExistente = patoRepository.findById(id)
-                .orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id));
-
-        Pato patoAtualizado = patoAssembler.montarPato(request, patoExistente);
-        return new PatoResponse(patoRepository.saveAndFlush(patoAtualizado));
+        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, getPato(id))));
     }
 
     public void apagar(Long id) {
@@ -50,9 +46,14 @@ public class PatoService {
     }
 
     public List<DropDownResponse> carregarEstadosHibernacao() {
-        return List.of(EstadoHibernacao.values())
-                .stream()
+        return Stream.of(EstadoHibernacao.values())
                 .map(e -> new DropDownResponse(e.name(), e.getNome()))
                 .toList();
+    }
+
+    public PatoResponse capturar(Long id) {
+        Pato pato = getPato(id);
+        pato.setCapturado(true);
+        return new PatoResponse(patoRepository.save(pato));
     }
 }

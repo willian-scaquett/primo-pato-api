@@ -77,4 +77,13 @@ public class PatoController {
         return ResponseEntity.ok(patoService.carregarEstadosHibernacao());
     }
 
+    @Operation(summary = "Endpoint para captura de patos primordiais")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
+    })
+    @PutMapping("/capturar/{id}")
+    public ResponseEntity<PatoResponse> capturarPato(@PathVariable Long id) {
+        return ResponseEntity.ok(patoService.capturar(id));
+    }
+
 }

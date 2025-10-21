@@ -5,6 +5,14 @@ import com.primopato.api.entity.Pais;
 public class LocalizacaoUtils {
 
     public final static Pais EUA = new Pais("Estados Unidos");
+    public final static Float COMBUSTIVEL_KM_L = 300f;
+    public final static double LATITUDE_DSIN = -22.21389;
+    public final static double LONGITUDE_DSIN = -49.94583;
+
+    //Usado para calcular a distância entre o alvo e a base de operações
+    public static double distanciaKmEntreDsinECoordenadas(double lat, double lon) {
+        return LocalizacaoUtils.distanciaKmEntreCoordenadas(LATITUDE_DSIN, LONGITUDE_DSIN, lat, lon);
+    }
 
     public static double distanciaKmEntreCoordenadas(double lat1, double lon1, double lat2, double lon2) {
         final double RAIO_TERRA_KM = 6371.0;

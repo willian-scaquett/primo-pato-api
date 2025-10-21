@@ -21,7 +21,8 @@ public record PatoResponse(
         Integer bpm,
         int quantidadeMutacoes,
         String nomeSuperPoder,
-        String tipoSuperPoder
+        String tipoSuperPoder,
+        boolean capturado
 ) {
     public PatoResponse(Pato pato) {
         this(
@@ -41,7 +42,8 @@ public record PatoResponse(
                 pato.getBpm(),
                 pato.getQuantidadeMutacoes(),
                 pato.getSuperPoder() != null ? pato.getSuperPoder().getNome() : null,
-                pato.getSuperPoder() != null ? pato.getSuperPoder().getTipo().getNome() : null
+                pato.getSuperPoder() != null ? pato.getSuperPoder().getTipo().getNome() : null,
+                pato.isCapturado()
         );
     }
 }

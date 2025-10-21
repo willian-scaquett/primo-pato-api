@@ -19,7 +19,8 @@ public record PatoRequest(
         Integer bpm,
         int quantidadeMutacoes,
         String nomeSuperPoder,
-        TipoSuperPoder tipoSuperPoder
+        TipoSuperPoder tipoSuperPoder,
+        boolean capturado
 ) {
     public PatoRequest(Pato pato) {
         this(
@@ -37,7 +38,8 @@ public record PatoRequest(
                 pato.getBpm(),
                 pato.getQuantidadeMutacoes(),
                 pato.getSuperPoder() != null ? pato.getSuperPoder().getNome() : null,
-                pato.getSuperPoder() != null ? pato.getSuperPoder().getTipo() : null
+                pato.getSuperPoder() != null ? pato.getSuperPoder().getTipo() : null,
+                pato.isCapturado()
         );
     }
 }
