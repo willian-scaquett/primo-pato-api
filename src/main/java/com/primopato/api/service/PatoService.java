@@ -22,8 +22,8 @@ public class PatoService {
     private final PatoAssembler patoAssembler;
     private final UsuarioService usuarioService;
 
-    public PatoResponse cadastrar(PatoRequest request, String usuario) {
-        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), null)));
+    public PatoResponse cadastrar(PatoRequest patoRequest, String usuario) {
+        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(patoRequest, usuarioService.getUsuario(usuario), null)));
     }
 
     public Pato editar(Long id,  PatoRequest request, String usuario) {

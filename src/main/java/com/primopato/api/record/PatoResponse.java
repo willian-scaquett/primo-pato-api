@@ -1,8 +1,7 @@
 package com.primopato.api.record;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.primopato.api.entity.Pato;
-import com.primopato.api.enumerated.EstadoHibernacao;
-import com.primopato.api.enumerated.TipoSuperPoder;
 
 public record PatoResponse(
         Long id,
@@ -10,12 +9,20 @@ public record PatoResponse(
         String modeloDrone,
         String fabricanteDrone,
         String paisDrone,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         float altura,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         float peso,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         double latitude,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         double longitude,
-        String endereco,
+        String pais,
+        String estado,
+        String cidade,
         String pontoReferencia,
+        String endereco,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         float precisao,
         String estadoHibernacao,
         Integer bpm,
@@ -35,8 +42,11 @@ public record PatoResponse(
                 pato.getPeso(),
                 pato.getLocalizacao().getCoordenadas().getLatitude(),
                 pato.getLocalizacao().getCoordenadas().getLongitude(),
-                pato.getLocalizacao().getEndereco(),
+                pato.getLocalizacao().getCidade().getEstado().getPais().getNome(),
+                pato.getLocalizacao().getCidade().getEstado().getNome(),
+                pato.getLocalizacao().getCidade().getNome(),
                 pato.getLocalizacao().getPontoReferencia(),
+                pato.getLocalizacao().getEndereco(),
                 pato.getPrecisaoDoGpsQuandoEncontrado(),
                 pato.getEstadoHibernacao().getNome(),
                 pato.getBpm(),

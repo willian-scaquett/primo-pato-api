@@ -18,30 +18,31 @@ public class PatoAssembler {
     private final PaisAssembler paisAssembler;
     private final LocalizacaoService localizacaoService;
 
-    public Pato montarPato(PatoRequest request, Usuario usuario, Pato patoExistente) {
+    public Pato montarPato(PatoRequest patoRequest, Usuario usuario, Pato patoExistente) {
         Pato pato = patoExistente == null ? new Pato() : patoExistente;
 
         pato.setUsuario(usuario);
 
-        Pais pais = paisAssembler.obterOuCriarPais(request.paisDrone());
-        Drone drone = droneAssembler.obterOuCriarDrone(request, pais);
+        Pais pais = paisAssembler.obterOuCriarPais(patoRequest.paisDrone());
+        Drone drone = droneAssembler.obterOuCriarDrone(patoRequest, pais);
         pato.setDroneQueEncontrou(drone);
 
         //realiza as conversões quando necessário
         boolean isEua = pais.equals(LocalizacaoUtils.EUA);
-        pato.setAltura(isEua ? UnidadesUtils.peParaCentimetro(request.altura()) : request.altura());
-        pato.setPeso(isEua ? UnidadesUtils.libraParaGrama(request.peso()) : request.peso());
-        pato.setPrecisaoDoGpsQuandoEncontrado(isEua ? UnidadesUtils.jardaParaCentimetro(request.precisao()) : request.precisao());
+        pato.setAltura(isEua ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
+        pato.setPeso(isEua ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
+        pato.setPrecisaoDoGpsQuandoEncontrado(isEua ? UnidadesUtils.jardaParaCentimetro(patoRequest.precisao()) : patoRequest.precisao());
 
-        pato.setLocalizacao(localizacaoService.obterOuCriarLocalizacao(request.latitude(), request.longitude()));
+        pato.setLocalizacao(localizacaoService.obterOuCriarLocalizacao(patoRequest.latitude(), patoRequest.longitude(),
+                patoRequest.pais(), patoRequest.estado(), patoRequest.cidade(), patoRequest.pontoReferencia()));
 
-        pato.setQuantidadeMutacoes(request.quantidadeMutacoes());
-        pato.setEstadoHibernacao(request.estadoHibernacao());
+        pato.setQuantidadeMutacoes(patoRequest.quantidadeMutacoes());
+        pato.setEstadoHibernacao(patoRequest.estadoHibernacao());
 
-        if (request.estadoHibernacao().equals(EstadoHibernacao.DESPERTO)) {
-            pato.setSuperPoder(superPoderAssembler.obterOuCriarSuperPoder(request.nomeSuperPoder(), request.tipoSuperPoder()));
+        if (patoRequest.estadoHibernacao().equals(EstadoHibernacao.DESPERTO)) {
+            pato.setSuperPoder(superPoderAssembler.obterOuCriarSuperPoder(patoRequest.nomeSuperPoder(), patoRequest.tipoSuperPoder()));
         } else {
-            pato.setBpm(request.bpm());
+            pato.setBpm(patoRequest.bpm());
         }
 
         return pato;

@@ -1,4 +1,3 @@
 package com.primopato.api.record;
 
-public record LoginResponse (String token) {
-}
+public record LoginResponse (String token) {}

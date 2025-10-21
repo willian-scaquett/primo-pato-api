@@ -19,7 +19,9 @@ public class LocalizacaoService {
     private final LocalizacaoAssembler localizacaoAssembler;
     private final GeocodingProvider geocodingProvider;
 
-    public Localizacao obterOuCriarLocalizacao(Double latitude, Double longitude) {
+    public Localizacao obterOuCriarLocalizacao(Double latitude, Double longitude, String pais, String estado,
+                                               String cidade, String pontoReferencia) {
+
         Optional<Localizacao> optionalLocalizacao = localizacaoRepository.findByCoordenadas(
                 new Coordenadas(latitude, longitude)
         );
@@ -29,7 +31,8 @@ public class LocalizacaoService {
         }
 
         GeocodingResult geoResult = geocodingProvider.reverse(latitude, longitude);
-        Localizacao localizacao = localizacaoAssembler.montarLocalizacao(latitude, longitude, geoResult);
+        Localizacao localizacao = localizacaoAssembler.montarLocalizacao(latitude, longitude, pais, estado, cidade,
+                pontoReferencia, geoResult);
 
         return localizacaoRepository.save(localizacao);
     }
