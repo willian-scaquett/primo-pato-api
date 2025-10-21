@@ -22,13 +22,14 @@ public class MissaoInfoAssembler {
 
     public MissaoInfo obterOuCriarMissaoInfo(Long idPato, String usuario) {
         Pato pato = patoService.getPato(idPato, usuario);
-        return missaoInfoRepository.findByPato(pato).orElseGet(() -> criarMissaoInfo(pato));
+        return missaoInfoRepository.findByPato_IdAndPato_Usuario_usuario(idPato, usuario).orElseGet(() -> criarMissaoInfo(pato, null));
     }
 
-    private MissaoInfo criarMissaoInfo(Pato pato) {
-        MissaoInfo missaoInfo = new MissaoInfo();
-
-        missaoInfo.setPato(pato);
+    public MissaoInfo criarMissaoInfo(Pato pato, MissaoInfo missaoInfo) {
+        if (missaoInfo == null) {
+            missaoInfo = new MissaoInfo();
+            missaoInfo.setPato(pato);
+        }
 
         SuperPoder superPoder = pato.getSuperPoder();
         missaoInfo.setDefesaDrone(superPoder != null ? superPoder.getTipo().getDefesa() : DefesaDrone.NENHUMA);

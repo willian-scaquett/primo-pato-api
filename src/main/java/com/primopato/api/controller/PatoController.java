@@ -1,9 +1,10 @@
 package com.primopato.api.controller;
 
-import com.primopato.api.enumerated.EstadoHibernacao;
+import com.primopato.api.entity.Pato;
 import com.primopato.api.record.DropDownResponse;
 import com.primopato.api.record.PatoRequest;
 import com.primopato.api.record.PatoResponse;
+import com.primopato.api.service.MissaoInfoService;
 import com.primopato.api.service.PatoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("pato")
 public class PatoController {
 
+    private final MissaoInfoService missaoInfoService;
     private final PatoService patoService;
 
     @Operation(summary = "Endpoint para cadastro de patos primordiais")
@@ -38,7 +40,9 @@ public class PatoController {
     })
     @PutMapping("/editar/{id}")
     public ResponseEntity<PatoResponse> editarPato(Authentication authentication, @PathVariable Long id, @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.ok(patoService.editar(id, patoRequest, authentication.getName()));
+        Pato pato = patoService.editar(id, patoRequest, authentication.getName());
+        missaoInfoService.atualizarMissaoInfo(pato);
+        return ResponseEntity.ok(new PatoResponse(pato));
     }
 
     @Operation(summary = "Endpoint para apagar patos primordiais")

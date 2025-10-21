@@ -43,9 +43,6 @@ public class Pato {
     @ManyToOne(targetEntity = SuperPoder.class, fetch = FetchType.LAZY)
     private SuperPoder superPoder;
 
-    @OneToOne(targetEntity = MissaoInfo.class, fetch = FetchType.LAZY)
-    private MissaoInfo missaoInfo;
-
     @Column
     private boolean capturado = false;
 

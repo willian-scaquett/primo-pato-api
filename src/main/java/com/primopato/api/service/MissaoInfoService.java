@@ -1,6 +1,7 @@
 package com.primopato.api.service;
 
 import com.primopato.api.entity.MissaoInfo;
+import com.primopato.api.entity.Pato;
 import com.primopato.api.record.MissaoInfoResponse;
 import com.primopato.api.service.assembler.MissaoInfoAssembler;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Service;
 public class MissaoInfoService {
 
     private final MissaoInfoAssembler missaoInfoAssembler;
+
+    public void atualizarMissaoInfo(Pato pato) {
+        missaoInfoAssembler.criarMissaoInfo(pato, missaoInfoAssembler.obterOuCriarMissaoInfo(pato.getId(), pato.getUsuario().getUsuario()));
+    }
 
     public MissaoInfoResponse buscarMissaoInfo(Long idPato, String usuario) {
         MissaoInfo missaoInfo = missaoInfoAssembler.obterOuCriarMissaoInfo(idPato, usuario);

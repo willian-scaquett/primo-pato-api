@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MissaoInfoRepository extends JpaRepository<MissaoInfo, Long> {
 
-    Optional<MissaoInfo> findByPato(Pato pato);
+    Optional<MissaoInfo> findByPato_IdAndPato_Usuario_usuario(Long idPato, String usuario);
 }

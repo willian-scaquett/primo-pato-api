@@ -26,8 +26,8 @@ public class PatoService {
         return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), null)));
     }
 
-    public PatoResponse editar(Long id,  PatoRequest request, String usuario) {
-        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), getPato(id, usuario))));
+    public Pato editar(Long id,  PatoRequest request, String usuario) {
+        return patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), getPato(id, usuario)));
     }
 
     public void apagar(Long id, String usuario) {
