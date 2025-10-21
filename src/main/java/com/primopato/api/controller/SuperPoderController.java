@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("superpoder")
 public class SuperPoderController {
 

@@ -18,7 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("pato")
 public class PatoController {
 
