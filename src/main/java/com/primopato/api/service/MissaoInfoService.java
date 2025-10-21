@@ -14,7 +14,7 @@ public class MissaoInfoService {
     private final MissaoInfoAssembler missaoInfoAssembler;
 
     public void atualizarMissaoInfo(Pato pato) {
-        missaoInfoAssembler.criarMissaoInfo(pato, missaoInfoAssembler.obterOuCriarMissaoInfo(pato.getId(), pato.getUsuario().getUsuario()));
+        missaoInfoAssembler.criarMissaoInfo(pato,pato.getMissaoInfo());
     }
 
     public MissaoInfoResponse buscarMissaoInfo(Long idPato, String usuario) {

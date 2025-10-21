@@ -21,7 +21,8 @@ public class MissaoInfo {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne(targetEntity = Pato.class, fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "pato_id", nullable = false, unique = true)
     private Pato pato;
 
     @Column

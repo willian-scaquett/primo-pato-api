@@ -49,4 +49,7 @@ public class Pato {
     @JoinColumn(nullable = false)
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
     private Usuario usuario;
+
+    @OneToOne(mappedBy = "pato", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private MissaoInfo missaoInfo;
 }
