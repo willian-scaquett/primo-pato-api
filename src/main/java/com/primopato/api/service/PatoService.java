@@ -38,8 +38,11 @@ public class PatoService {
     }
 
     public PatoRequest buscarPorId(Long id) {
-        return new PatoRequest(patoRepository.findById(id)
-                .orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id)));
+        return new PatoRequest(getPato(id));
+    }
+
+    public Pato getPato(Long id) {
+        return patoRepository.findById(id).orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id));
     }
 
     public List<PatoResponse> buscarTodosFiltrado(String filtro) {
