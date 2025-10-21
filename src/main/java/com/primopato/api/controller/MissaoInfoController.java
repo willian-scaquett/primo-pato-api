@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class MissaoInfoController {
             @ApiResponse(responseCode = "200", description = "Informações de missão buscadas com sucesso")
     })
     @GetMapping("/buscar/{idPato}")
-    public ResponseEntity<MissaoInfoResponse> buscar(@PathVariable Long idPato) {
-        return ResponseEntity.ok(missaoInfoService.buscarMissaoInfo(idPato));
+    public ResponseEntity<MissaoInfoResponse> buscar(Authentication authentication, @PathVariable Long idPato) {
+        return ResponseEntity.ok(missaoInfoService.buscarMissaoInfo(idPato, authentication.getName()));
     }
 
 }

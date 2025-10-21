@@ -18,8 +18,10 @@ public class PatoAssembler {
     private final PaisAssembler paisAssembler;
     private final LocalizacaoService localizacaoService;
 
-    public Pato montarPato(PatoRequest request, Pato patoExistente) {
+    public Pato montarPato(PatoRequest request, Usuario usuario, Pato patoExistente) {
         Pato pato = patoExistente == null ? new Pato() : patoExistente;
+
+        pato.setUsuario(usuario);
 
         Pais pais = paisAssembler.obterOuCriarPais(request.paisDrone());
         Drone drone = droneAssembler.obterOuCriarDrone(request, pais);

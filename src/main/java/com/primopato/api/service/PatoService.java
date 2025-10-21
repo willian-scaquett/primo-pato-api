@@ -20,29 +20,31 @@ public class PatoService {
 
     private final PatoRepository patoRepository;
     private final PatoAssembler patoAssembler;
+    private final UsuarioService usuarioService;
 
-    public PatoResponse cadastrar(PatoRequest request) {
-        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, null)));
+    public PatoResponse cadastrar(PatoRequest request, String usuario) {
+        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), null)));
     }
 
-    public PatoResponse editar(Long id, PatoRequest request) {
-        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, getPato(id))));
+    public PatoResponse editar(Long id,  PatoRequest request, String usuario) {
+        return new PatoResponse(patoRepository.save(patoAssembler.montarPato(request, usuarioService.getUsuario(usuario), getPato(id, usuario))));
     }
 
-    public void apagar(Long id) {
-        patoRepository.deleteById(id);
+    public void apagar(Long id, String usuario) {
+        patoRepository.delete(getPato(id, usuario));
     }
 
-    public PatoRequest buscarPorId(Long id) {
-        return new PatoRequest(getPato(id));
+    public PatoRequest buscarPorId(Long id, String usuario) {
+        return new PatoRequest(getPato(id, usuario));
     }
 
-    public Pato getPato(Long id) {
-        return patoRepository.findById(id).orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id));
+    public Pato getPato(Long id, String usuario) {
+        return patoRepository.findByIdAndUsuario_Usuario(id, usuario)
+                .orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id + " para o usuário " + usuario));
     }
 
-    public List<PatoResponse> buscarTodosFiltrado(String filtro) {
-        return patoRepository.findAllByFiltro("%" + filtro.toUpperCase() + "%");
+    public List<PatoResponse> buscarTodosFiltrado(String filtro, String usuario) {
+        return patoRepository.findAllByFiltro("%" + filtro.toUpperCase() + "%", usuario);
     }
 
     public List<DropDownResponse> carregarEstadosHibernacao() {
@@ -51,8 +53,8 @@ public class PatoService {
                 .toList();
     }
 
-    public PatoResponse capturar(Long id) {
-        Pato pato = getPato(id);
+    public PatoResponse capturar(Long id, String usuario) {
+        Pato pato = getPato(id, usuario);
         pato.setCapturado(true);
         return new PatoResponse(patoRepository.save(pato));
     }

@@ -12,8 +12,8 @@ public class MissaoInfoService {
 
     private final MissaoInfoAssembler missaoInfoAssembler;
 
-    public MissaoInfoResponse buscarMissaoInfo(Long idPato) {
-        MissaoInfo missaoInfo = missaoInfoAssembler.obterOuCriarMissaoInfo(idPato);
+    public MissaoInfoResponse buscarMissaoInfo(Long idPato, String usuario) {
+        MissaoInfo missaoInfo = missaoInfoAssembler.obterOuCriarMissaoInfo(idPato, usuario);
 
         double gastoCombustivelIda = missaoInfo.getGastoCombustivelIda();
         double gastoCombustivelVolta = missaoInfo.getGastoCombustivelVolta();

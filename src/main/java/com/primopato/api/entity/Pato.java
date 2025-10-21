@@ -48,4 +48,8 @@ public class Pato {
 
     @Column
     private boolean capturado = false;
+
+    @JoinColumn(nullable = false)
+    @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
+    private Usuario usuario;
 }

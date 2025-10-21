@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato cadastrado com sucesso")
     })
     @PostMapping("/cadastrar")
-    public ResponseEntity<PatoResponse> cadastrarPato(@RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.ok(patoService.cadastrar(patoRequest));
+    public ResponseEntity<PatoResponse> cadastrarPato(Authentication authentication, @RequestBody PatoRequest patoRequest) {
+        return ResponseEntity.ok(patoService.cadastrar(patoRequest, authentication.getName()));
     }
 
     @Operation(summary = "Endpoint para edição de patos primordiais")
@@ -36,8 +37,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
     })
     @PutMapping("/editar/{id}")
-    public ResponseEntity<PatoResponse> editarPato(@PathVariable Long id, @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.ok(patoService.editar(id, patoRequest));
+    public ResponseEntity<PatoResponse> editarPato(Authentication authentication, @PathVariable Long id, @RequestBody PatoRequest patoRequest) {
+        return ResponseEntity.ok(patoService.editar(id, patoRequest, authentication.getName()));
     }
 
     @Operation(summary = "Endpoint para apagar patos primordiais")
@@ -45,8 +46,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato apagado com sucesso")
     })
     @DeleteMapping("/apagar/{id}")
-    public ResponseEntity<?> apagarPato(@PathVariable Long id) {
-        patoService.apagar(id);
+    public ResponseEntity<?> apagarPato(Authentication authentication, @PathVariable Long id) {
+        patoService.apagar(id, authentication.getName());
         return ResponseEntity.ok().build();
     }
 
@@ -55,8 +56,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato buscado com sucesso")
     })
     @GetMapping("/buscar/{id}")
-    public ResponseEntity<PatoRequest> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(patoService.buscarPorId(id));
+    public ResponseEntity<PatoRequest> buscarPorId(Authentication authentication, @PathVariable Long id) {
+        return ResponseEntity.ok(patoService.buscarPorId(id, authentication.getName()));
     }
 
     @Operation(summary = "Endpoint para buscar patos primordiais")
@@ -64,8 +65,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Patos buscados com sucesso")
     })
     @GetMapping("/buscar")
-    public ResponseEntity<List<PatoResponse>> buscarTodosFiltrado(@RequestParam(required = false, defaultValue = "") String filtro) {
-        return ResponseEntity.ok(patoService.buscarTodosFiltrado(filtro));
+    public ResponseEntity<List<PatoResponse>> buscarTodosFiltrado(Authentication authentication, @RequestParam(required = false, defaultValue = "") String filtro) {
+        return ResponseEntity.ok(patoService.buscarTodosFiltrado(filtro, authentication.getName()));
     }
 
     @Operation(summary = "Endpoint para carregar estados de hibernação")
@@ -82,8 +83,8 @@ public class PatoController {
             @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
     })
     @PutMapping("/capturar/{id}")
-    public ResponseEntity<PatoResponse> capturarPato(@PathVariable Long id) {
-        return ResponseEntity.ok(patoService.capturar(id));
+    public ResponseEntity<PatoResponse> capturarPato(Authentication authentication, @PathVariable Long id) {
+        return ResponseEntity.ok(patoService.capturar(id, authentication.getName()));
     }
 
 }

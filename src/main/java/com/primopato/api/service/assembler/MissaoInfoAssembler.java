@@ -20,8 +20,8 @@ public class MissaoInfoAssembler {
     private final MissaoInfoRepository missaoInfoRepository;
     private final PatoService patoService;
 
-    public MissaoInfo obterOuCriarMissaoInfo(Long idPato) {
-        Pato pato = patoService.getPato(idPato);
+    public MissaoInfo obterOuCriarMissaoInfo(Long idPato, String usuario) {
+        Pato pato = patoService.getPato(idPato, usuario);
         return missaoInfoRepository.findByPato(pato).orElseGet(() -> criarMissaoInfo(pato));
     }
 

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PatoRepository extends JpaRepository<Pato, Long> {
@@ -19,7 +20,8 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
     LEFT JOIN FETCH p.droneQueEncontrou d
     LEFT JOIN FETCH p.superPoder s
     WHERE
-        :filtro = ''
+        p.usuario.usuario = :usuario
+        AND (:filtro = ''
         OR CONCAT(p.id, '') LIKE :filtro
         OR CONCAT(p.altura, '') LIKE :filtro
         OR CONCAT(p.peso, '') LIKE :filtro
@@ -38,8 +40,9 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
         OR d.modelo.nome LIKE :filtro
         OR d.modelo.fabricante.nome LIKE :filtro
         OR s.nome LIKE :filtro
-        OR CONCAT(s.tipo, '') LIKE :filtro
+        OR CONCAT(s.tipo, '') LIKE :filtro)
     """)
-    List<PatoResponse> findAllByFiltro(@Param("filtro") String filtro);
+    List<PatoResponse> findAllByFiltro(String filtro, String usuario);
 
+    Optional<Pato> findByIdAndUsuario_Usuario(Long id, String usuario);
 }
