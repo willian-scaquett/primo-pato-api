@@ -22,9 +22,11 @@ public class OpenCageGeocodingProvider implements GeocodingProvider {
 
         JOpenCageResult result = geocoder.reverse(request).getResults().getFirst();
 
+        String cidade = result.getComponents().getCity();
+
         return new GeocodingResult(
                 result.getFormatted(),
-                result.getComponents().getCity(),
+                cidade != null ? cidade : result.getComponents().getTown(),
                 result.getComponents().getState(),
                 result.getComponents().getCountry()
         );
