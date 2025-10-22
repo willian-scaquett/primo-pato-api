@@ -20,7 +20,7 @@ public class SuperPoderController {
 
     private final SuperPoderService superPoderService;
 
-    @Operation(summary = "Endpoint para carregar tipos de super poder")
+    @Operation(summary = "Endpoint para carregar tipos de super-poder")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Tipos de super poder carregados com sucesso")
     })
@@ -29,7 +29,7 @@ public class SuperPoderController {
         return ResponseEntity.ok(superPoderService.carregarTipos());
     }
 
-    @Operation(summary = "Endpoint para listar todos super poderes de um tipo")
+    @Operation(summary = "Endpoint para listar super-poderes de um tipo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Super poderes buscados com sucesso")
     })

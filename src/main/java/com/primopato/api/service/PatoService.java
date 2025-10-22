@@ -7,6 +7,7 @@ import com.primopato.api.record.PatoRequest;
 import com.primopato.api.record.PatoResponse;
 import com.primopato.api.repository.PatoRepository;
 import com.primopato.api.service.assembler.PatoAssembler;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class PatoService {
 
     public Pato getPato(Long id, String usuario) {
         return patoRepository.findByIdAndUsuario_Usuario(id, usuario)
-                .orElseThrow(() -> new InvalidParameterException("Nenhum pato encontrado com o ID " + id + " para o usuário " + usuario));
+                .orElseThrow(() -> new EntityNotFoundException("Nenhum pato encontrado com o ID " + id + " para o usuário " + usuario));
     }
 
     public List<PatoResponse> buscarTodosFiltrado(String filtro, String usuario) {

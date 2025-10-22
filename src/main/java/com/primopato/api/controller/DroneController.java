@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class DroneController {
 
     private final DroneService droneService;
 
-    @Operation(summary = "Endpoint para listar todos fabricantes cadastrados")
+    @Operation(summary = "Endpoint para listar todos fabricantes de drone cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Fabricantes buscados com sucesso")
     })
@@ -28,7 +27,7 @@ public class DroneController {
         return ResponseEntity.ok(droneService.carregarFabricantes(idPais));
     }
 
-    @Operation(summary = "Endpoint para listar todos modelos cadastrados")
+    @Operation(summary = "Endpoint para listar todos modelos de drone cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Modelos buscados com sucesso")
     })
@@ -37,7 +36,7 @@ public class DroneController {
         return ResponseEntity.ok(droneService.carregarModelos(idFabricante));
     }
 
-    @Operation(summary = "Endpoint para listar todos números de série cadastrados")
+    @Operation(summary = "Endpoint para listar todos números de série de drone cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Números de série buscados com sucesso")
     })
@@ -45,5 +44,4 @@ public class DroneController {
     public ResponseEntity<List<DropDownResponse>> carregarNumerosSerie(@PathVariable Long idModelo) {
         return ResponseEntity.ok(droneService.carregarNumerosSerie(idModelo));
     }
-
 }

@@ -1,10 +1,13 @@
 package com.primopato.api.service;
 
 import com.primopato.api.entity.Usuario;
+import com.primopato.api.record.CadastroUsuarioRequest;
 import com.primopato.api.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.security.InvalidParameterException;
 
 @Service
 public class UsuarioService {
@@ -15,21 +18,21 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario criarUsuario(String usuario, String senha, String nome) {
-        if (usuarioRepository.existsByUsuario(usuario)) {
-            throw new RuntimeException("Username já existe");
+    public Usuario criarUsuario(CadastroUsuarioRequest cadastroUsuarioRequest) {
+        if (usuarioRepository.existsByUsuario(cadastroUsuarioRequest.usuario())) {
+            throw new InvalidParameterException("Usuário já existe");
         }
 
-        Usuario u = new Usuario();
-        u.setUsuario(usuario);
-        u.setSenha(passwordEncoder.encode(senha));
-        u.setNome(nome);
+        Usuario usuario = new Usuario();
+        usuario.setUsuario(cadastroUsuarioRequest.usuario());
+        usuario.setSenha(passwordEncoder.encode(cadastroUsuarioRequest.senha()));
+        usuario.setNome(cadastroUsuarioRequest.nome());
 
-        return usuarioRepository.save(u);
+        return usuarioRepository.save(usuario);
     }
 
     public Usuario getUsuario(String usuario) {
         return usuarioRepository.findByUsuario(usuario)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
 }

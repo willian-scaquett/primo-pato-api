@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,16 +28,17 @@ public class PatoController {
 
     @Operation(summary = "Endpoint para cadastro de patos primordiais")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pato cadastrado com sucesso")
+            @ApiResponse(responseCode = "201", description = "Pato cadastrado com sucesso")
     })
     @PostMapping("/cadastrar")
     public ResponseEntity<PatoResponse> cadastrarPato(Authentication authentication, @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.ok(patoService.cadastrar(patoRequest, authentication.getName()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(patoService.cadastrar(patoRequest, authentication.getName()));
     }
 
     @Operation(summary = "Endpoint para edição de patos primordiais")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     })
     @PutMapping("/editar/{id}")
     public ResponseEntity<PatoResponse> editarPato(Authentication authentication, @PathVariable Long id, @RequestBody PatoRequest patoRequest) {
@@ -47,7 +49,8 @@ public class PatoController {
 
     @Operation(summary = "Endpoint para apagar patos primordiais")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pato apagado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Pato apagado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     })
     @DeleteMapping("/apagar/{id}")
     public ResponseEntity<?> apagarPato(Authentication authentication, @PathVariable Long id) {
@@ -57,7 +60,8 @@ public class PatoController {
 
     @Operation(summary = "Endpoint para buscar pato primordial por id")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pato buscado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Pato buscado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     })
     @GetMapping("/buscar/{id}")
     public ResponseEntity<PatoRequest> buscarPorId(Authentication authentication, @PathVariable Long id) {
@@ -84,7 +88,8 @@ public class PatoController {
 
     @Operation(summary = "Endpoint para captura de patos primordiais")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Pato editado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     })
     @PutMapping("/capturar/{id}")
     public ResponseEntity<PatoResponse> capturarPato(Authentication authentication, @PathVariable Long id) {

@@ -2,7 +2,6 @@ package com.primopato.api.service;
 
 import com.primopato.api.record.DropDownResponse;
 import com.primopato.api.repository.PaisRepository;
-import com.primopato.api.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

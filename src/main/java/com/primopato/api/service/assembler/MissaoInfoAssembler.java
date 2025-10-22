@@ -35,7 +35,6 @@ public class MissaoInfoAssembler {
         missaoInfo.setDefesaDrone(superPoder != null ? superPoder.getTipo().getDefesa() : DefesaDrone.NENHUMA);
 
         missaoInfo.setDesempenhoCombustivelPorLitroPosCaputura(LocalizacaoUtils.COMBUSTIVEL_KM_L - (pato.getPeso() / PESO_BASE_CALCULO_COMBUSTIVEL));
-        //missaoInfo.setRisco()
 
         Float potencializador = pato.getEstadoHibernacao().getPotencializador();
         missaoInfo.setGanhoCientifico(pato.getQuantidadeMutacoes() * potencializador);
