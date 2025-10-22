@@ -2,12 +2,15 @@
 
 ## Ferramentas utilizadas
 - Java 21
-- Spring boot 3.3.4
+- Spring Boot 3.5.6
 - Maven
-- H2 banco em memória
+- PostgreSQL
+- Swagger
+- OpenCage
 - Junit5
 - JPA
-- Swagger
+- Lombok
+- JWT
 
 ## Passos para executar a aplicação
 
@@ -17,6 +20,4 @@
 ### Rodar API
 * ./mvnw spring-boot:run
 
-## Rotas para acessar Swagger e Banco de dados
-
-- Documentação da API com swagger [clique aqui.](http://localhost:8080/swagger-ui/index.html)
+## Documentação (Swagger) [clique aqui.](http://130.107.74.13:8080/swagger-ui/index.html)
