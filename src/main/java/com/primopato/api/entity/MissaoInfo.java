@@ -68,5 +68,4 @@ public class MissaoInfo {
     public Double getGastoCombustivelVolta() {
         return getDistancia() / this.desempenhoCombustivelPorLitroPosCaputura;
     }
-
 }

@@ -23,8 +23,8 @@ public class MissaoInfoController {
             @ApiResponse(responseCode = "200", description = "Informações de missão buscadas com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     })
-    @GetMapping("/buscar/{idPato}")
+    @GetMapping("/{idPato}")
     public ResponseEntity<MissaoInfoResponse> buscar(Authentication authentication, @PathVariable Long idPato) {
-        return ResponseEntity.ok(missaoInfoService.buscarMissaoInfo(idPato, authentication.getName()));
+        return ResponseEntity.ok(missaoInfoService.montarMissaoInfoResponse(idPato, authentication.getName()));
     }
 }

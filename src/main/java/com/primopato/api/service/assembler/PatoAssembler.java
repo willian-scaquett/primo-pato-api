@@ -18,10 +18,11 @@ public class PatoAssembler {
     private final PaisAssembler paisAssembler;
     private final LocalizacaoService localizacaoService;
 
-    public Pato montarPato(PatoRequest patoRequest, Usuario usuario, Pato patoExistente) {
-        Pato pato = patoExistente == null ? new Pato() : patoExistente;
-
-        pato.setUsuario(usuario);
+    public Pato montarPato(PatoRequest patoRequest, Usuario usuario, Pato pato) {
+        if (pato == null) {
+            pato = new Pato();
+            pato.setUsuario(usuario);
+        }
 
         Pais pais = paisAssembler.obterOuCriarPais(patoRequest.paisDrone());
         Drone drone = droneAssembler.obterOuCriarDrone(patoRequest, pais);
@@ -41,8 +42,10 @@ public class PatoAssembler {
 
         if (patoRequest.estadoHibernacao().equals(EstadoHibernacao.DESPERTO)) {
             pato.setSuperPoder(superPoderAssembler.obterOuCriarSuperPoder(patoRequest.nomeSuperPoder(), patoRequest.tipoSuperPoder()));
+            pato.setBpm(null);
         } else {
             pato.setBpm(patoRequest.bpm());
+            pato.setSuperPoder(null);
         }
 
         return pato;

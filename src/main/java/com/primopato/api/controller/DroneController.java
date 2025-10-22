@@ -22,26 +22,41 @@ public class DroneController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Fabricantes buscados com sucesso")
     })
-    @GetMapping("/pais/{idPais}/fabricante/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregarFabricantes(@PathVariable Long idPais) {
-        return ResponseEntity.ok(droneService.carregarFabricantes(idPais));
+    @GetMapping("/pais/{idPais}/fabricante")
+    public ResponseEntity<List<DropDownResponse>> listarFabricantes(@PathVariable Long idPais) {
+        return ResponseEntity.ok(
+                droneService.listarFabricantes(idPais)
+                        .stream()
+                        .map(fabricanteDrone -> new DropDownResponse(fabricanteDrone.getId().toString(), fabricanteDrone.getNome()))
+                        .toList()
+        );
     }
 
     @Operation(summary = "Endpoint para listar todos modelos de drone cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Modelos buscados com sucesso")
     })
-    @GetMapping("/fabricante/{idFabricante}/modelo/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregarModelos(@PathVariable Long idFabricante) {
-        return ResponseEntity.ok(droneService.carregarModelos(idFabricante));
+    @GetMapping("/fabricante/{idFabricante}/modelo")
+    public ResponseEntity<List<DropDownResponse>> listarModelos(@PathVariable Long idFabricante) {
+        return ResponseEntity.ok(
+                droneService.listarModelos(idFabricante)
+                        .stream()
+                        .map(modeloDrone -> new DropDownResponse(modeloDrone.getId().toString(), modeloDrone.getNome()))
+                        .toList()
+        );
     }
 
     @Operation(summary = "Endpoint para listar todos números de série de drone cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Números de série buscados com sucesso")
     })
-    @GetMapping("/modelo/{idModelo}/numeroSerie/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregarNumerosSerie(@PathVariable Long idModelo) {
-        return ResponseEntity.ok(droneService.carregarNumerosSerie(idModelo));
+    @GetMapping("/modelo/{idModelo}/numeroSerie")
+    public ResponseEntity<List<DropDownResponse>> listarNumerosSerie(@PathVariable Long idModelo) {
+        return ResponseEntity.ok(
+                droneService.listarDrones(idModelo)
+                        .stream()
+                        .map(drone -> new DropDownResponse(drone.getId().toString(), drone.getNumeroSerie()))
+                        .toList()
+        );
     }
 }

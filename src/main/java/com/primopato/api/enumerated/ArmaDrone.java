@@ -2,7 +2,6 @@ package com.primopato.api.enumerated;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.math.BigDecimal;
 
 @Getter

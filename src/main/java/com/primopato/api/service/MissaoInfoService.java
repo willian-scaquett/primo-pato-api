@@ -1,7 +1,6 @@
 package com.primopato.api.service;
 
 import com.primopato.api.entity.MissaoInfo;
-import com.primopato.api.entity.Pato;
 import com.primopato.api.record.MissaoInfoResponse;
 import com.primopato.api.service.assembler.MissaoInfoAssembler;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +12,12 @@ public class MissaoInfoService {
 
     private final MissaoInfoAssembler missaoInfoAssembler;
 
-    public void atualizarMissaoInfo(Pato pato) {
-        missaoInfoAssembler.criarMissaoInfo(pato,pato.getMissaoInfo());
+    public MissaoInfo getMissaoInfo(Long idPato, String usuario) {
+        return missaoInfoAssembler.obterOuCriarMissaoInfo(idPato, usuario);
     }
 
-    public MissaoInfoResponse buscarMissaoInfo(Long idPato, String usuario) {
-        MissaoInfo missaoInfo = missaoInfoAssembler.obterOuCriarMissaoInfo(idPato, usuario);
+    public MissaoInfoResponse montarMissaoInfoResponse(Long idPato, String usuario) {
+        MissaoInfo missaoInfo = getMissaoInfo(idPato, usuario);
 
         double gastoCombustivelIda = missaoInfo.getGastoCombustivelIda();
         double gastoCombustivelVolta = missaoInfo.getGastoCombustivelVolta();

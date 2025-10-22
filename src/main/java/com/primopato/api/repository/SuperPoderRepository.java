@@ -4,7 +4,6 @@ import com.primopato.api.entity.SuperPoder;
 import com.primopato.api.enumerated.TipoSuperPoder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 

@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,18 +24,26 @@ public class SuperPoderController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Tipos de super poder carregados com sucesso")
     })
-    @GetMapping("/tipos/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregarTipos() {
-        return ResponseEntity.ok(superPoderService.carregarTipos());
+    @GetMapping("/tipo")
+    public ResponseEntity<List<DropDownResponse>> listarTipos() {
+        return ResponseEntity.ok(
+                Stream.of(TipoSuperPoder.values())
+                        .map(t -> new DropDownResponse(t.name(), t.getNome()))
+                        .toList()
+        );
     }
 
     @Operation(summary = "Endpoint para listar super-poderes de um tipo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Super poderes buscados com sucesso")
     })
-    @GetMapping("/tipo/{tipoSuperPoder}/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregarSuperPoderes(@PathVariable TipoSuperPoder tipoSuperPoder) {
-        return ResponseEntity.ok(superPoderService.carregarSuperPoderes(tipoSuperPoder));
+    @GetMapping("/tipo/{tipoSuperPoder}")
+    public ResponseEntity<List<DropDownResponse>> listarSuperPoderes(@PathVariable TipoSuperPoder tipoSuperPoder) {
+        return ResponseEntity.ok(
+                superPoderService.carregarSuperPoderes(tipoSuperPoder)
+                        .stream()
+                        .map(s -> new DropDownResponse(s.getId().toString(), s.getNome()))
+                        .toList()
+        );
     }
-
 }

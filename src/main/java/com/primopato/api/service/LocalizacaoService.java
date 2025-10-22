@@ -8,7 +8,6 @@ import com.primopato.api.service.geocoding.GeocodingProvider;
 import com.primopato.api.service.geocoding.GeocodingResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @RequiredArgsConstructor

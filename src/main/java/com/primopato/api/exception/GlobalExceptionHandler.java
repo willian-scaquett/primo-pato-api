@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.security.InvalidParameterException;
 
 @Slf4j
@@ -36,6 +36,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<String> handleInvalidParameter(InvalidParameterException ex) {
         log.warn("Parâmetro inválido: {}", ex.getMessage());
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        log.warn("Requisição inválida: {}", ex.getMessage());
         return ResponseEntity.badRequest().build();
     }
 

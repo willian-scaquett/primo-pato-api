@@ -2,7 +2,6 @@ package com.primopato.api.service.assembler;
 
 import com.primopato.api.entity.SuperPoder;
 import com.primopato.api.enumerated.TipoSuperPoder;
-import com.primopato.api.record.PatoRequest;
 import com.primopato.api.repository.SuperPoderRepository;
 import com.primopato.api.utils.StringUtils;
 import lombok.RequiredArgsConstructor;

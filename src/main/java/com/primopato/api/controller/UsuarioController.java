@@ -34,12 +34,14 @@ public class UsuarioController {
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-            authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(
-                            loginRequest.usuario(),
-                            loginRequest.senha())
-            );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.usuario(),
+                        loginRequest.senha()
+                )
+        );
 
-            return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.usuario())));
+        return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.usuario())));
     }
 
     @Operation(summary = "Endpoint para o usuário se cadastrar")
@@ -49,8 +51,7 @@ public class UsuarioController {
     })
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrar(@RequestBody @Valid CadastroUsuarioRequest cadastroUsuarioRequest) {
-
-            Usuario usuario = usuarioService.criarUsuario(cadastroUsuarioRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponse(jwtUtil.generateToken(usuario.getUsername())));
+        Usuario usuario = usuarioService.criarUsuario(cadastroUsuarioRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponse(jwtUtil.generateToken(usuario.getUsername())));
     }
 }

@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,9 +22,13 @@ public class PaisController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Países buscados com sucesso")
     })
-    @GetMapping("/carregar")
-    public ResponseEntity<List<DropDownResponse>> carregar() {
-        return ResponseEntity.ok(paisService.carregar());
+    @GetMapping
+    public ResponseEntity<List<DropDownResponse>> listarPaises() {
+        return ResponseEntity.ok(
+                paisService.listarPaises()
+                        .stream()
+                        .map(pais -> new DropDownResponse(pais.getId().toString(), pais.getNome()))
+                        .toList()
+        );
     }
-
 }

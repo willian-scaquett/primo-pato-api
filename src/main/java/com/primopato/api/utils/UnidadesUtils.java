@@ -1,7 +1,5 @@
 package com.primopato.api.utils;
 
-import com.primopato.api.entity.Pais;
-
 public class UnidadesUtils {
 
     public static Float peParaCentimetro(Float medida) {

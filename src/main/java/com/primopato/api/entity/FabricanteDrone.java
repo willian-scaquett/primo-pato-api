@@ -24,5 +24,4 @@ public class FabricanteDrone {
 
     @ManyToOne(targetEntity = Pais.class, fetch = FetchType.LAZY)
     private Pais pais;
-
 }

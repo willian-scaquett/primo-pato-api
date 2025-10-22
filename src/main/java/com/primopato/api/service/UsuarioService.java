@@ -4,19 +4,17 @@ import com.primopato.api.entity.Usuario;
 import com.primopato.api.record.CadastroUsuarioRequest;
 import com.primopato.api.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.security.InvalidParameterException;
 
+@RequiredArgsConstructor
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Usuario criarUsuario(CadastroUsuarioRequest cadastroUsuarioRequest) {
         if (usuarioRepository.existsByUsuario(cadastroUsuarioRequest.usuario())) {

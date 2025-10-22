@@ -5,8 +5,6 @@ import com.primopato.api.service.geocoding.GeocodingResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Component
 public class LocalizacaoAssembler {

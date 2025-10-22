@@ -2,7 +2,6 @@ package com.primopato.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Objects;
 
 @Data
