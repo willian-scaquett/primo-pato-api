@@ -20,7 +20,7 @@ public class SuperPoderController {
 
     private final SuperPoderService superPoderService;
 
-    @Operation(summary = "Endpoint para carregar tipos de super-poder")
+    @Operation(summary = "Endpoint para listar tipos de super-poder")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Tipos de super poder carregados com sucesso")
     })

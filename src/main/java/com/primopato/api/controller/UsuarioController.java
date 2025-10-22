@@ -44,7 +44,7 @@ public class UsuarioController {
         return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.usuario())));
     }
 
-    @Operation(summary = "Endpoint para o usuário se cadastrar")
+    @Operation(summary = "Endpoint para cadastro de usuário")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Cadastro de usuário realizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Dados de cadastro de usuário inválidos")

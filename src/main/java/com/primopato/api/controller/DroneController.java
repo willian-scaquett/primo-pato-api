@@ -18,7 +18,7 @@ public class DroneController {
 
     private final DroneService droneService;
 
-    @Operation(summary = "Endpoint para listar todos fabricantes de drone cadastrados")
+    @Operation(summary = "Endpoint para listar fabricantes de drone")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Fabricantes buscados com sucesso")
     })
@@ -32,7 +32,7 @@ public class DroneController {
         );
     }
 
-    @Operation(summary = "Endpoint para listar todos modelos de drone cadastrados")
+    @Operation(summary = "Endpoint para listar modelos de drone de um fabricante")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Modelos buscados com sucesso")
     })
@@ -46,7 +46,7 @@ public class DroneController {
         );
     }
 
-    @Operation(summary = "Endpoint para listar todos números de série de drone cadastrados")
+    @Operation(summary = "Endpoint para listar números de série de drone de um modelo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Números de série buscados com sucesso")
     })

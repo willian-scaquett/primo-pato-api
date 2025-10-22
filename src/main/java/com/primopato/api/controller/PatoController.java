@@ -25,7 +25,7 @@ public class PatoController {
 
     private final PatoService patoService;
 
-    @Operation(summary = "Endpoint para cadastro de patos primordiais")
+    @Operation(summary = "Endpoint para cadastro de pato")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Pato cadastrado com sucesso")
     })
@@ -34,7 +34,7 @@ public class PatoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new PatoResponse(patoService.cadastrar(patoRequest, authentication.getName())));
     }
 
-    @Operation(summary = "Endpoint para edição de patos primordiais")
+    @Operation(summary = "Endpoint para edição de pato")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pato editado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
@@ -44,7 +44,7 @@ public class PatoController {
         return ResponseEntity.ok(new PatoResponse(patoService.editar(id, patoRequest, authentication.getName())));
     }
 
-    @Operation(summary = "Endpoint para apagar patos primordiais")
+    @Operation(summary = "Endpoint para apagar pato")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Pato apagado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
@@ -55,7 +55,7 @@ public class PatoController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Endpoint para buscar pato primordial por id")
+    @Operation(summary = "Endpoint para buscar pato por id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pato buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
@@ -65,7 +65,7 @@ public class PatoController {
         return ResponseEntity.ok(new PatoRequest(patoService.getPato(id, authentication.getName())));
     }
 
-    @Operation(summary = "Endpoint para buscar patos primordiais")
+    @Operation(summary = "Endpoint para buscar patos")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Patos buscados com sucesso")
     })
@@ -79,7 +79,7 @@ public class PatoController {
         );
     }
 
-    @Operation(summary = "Endpoint para captura de patos primordiais")
+    @Operation(summary = "Endpoint para definir pato como capturado")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pato editado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
@@ -89,7 +89,7 @@ public class PatoController {
         return ResponseEntity.ok(new PatoResponse(patoService.capturar(id, authentication.getName())));
     }
 
-    @Operation(summary = "Endpoint para carregar estados de hibernação")
+    @Operation(summary = "Endpoint para listar estados de hibernação")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Estados de hibernação carregados com sucesso")
     })

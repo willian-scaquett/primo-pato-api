@@ -18,7 +18,7 @@ public class PaisController {
 
     private final PaisService paisService;
 
-    @Operation(summary = "Endpoint para listar todos países cadastrados")
+    @Operation(summary = "Endpoint para listar países cadastrados")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Países buscados com sucesso")
     })

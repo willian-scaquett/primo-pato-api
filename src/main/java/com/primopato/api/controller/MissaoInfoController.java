@@ -18,7 +18,7 @@ public class MissaoInfoController {
 
     private final MissaoInfoService missaoInfoService;
 
-    @Operation(summary = "Endpoint para carregar as informações de missão de captura por id do pato")
+    @Operation(summary = "Endpoint para buscar informações de missão de captura por id do pato")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Informações de missão buscadas com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
