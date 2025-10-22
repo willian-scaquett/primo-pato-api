@@ -1,14 +1,8 @@
-version: "3.9"
+version: '3.9'
 
 services:
-  api-springboot:
+  api:
+    build: .
     image: api-springboot:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: api-springboot
     ports:
-      - "8443:8443"
-    volumes:
-      - ./keystore.p12:/app/keystore.p12
-    restart: always
+      - "8080:8080"
