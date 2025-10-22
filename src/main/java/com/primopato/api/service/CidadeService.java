@@ -1,15 +1,15 @@
-package com.primopato.api.service.assembler;
+package com.primopato.api.service;
 
 import com.primopato.api.entity.Cidade;
 import com.primopato.api.entity.Estado;
 import com.primopato.api.repository.CidadeRepository;
 import com.primopato.api.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Component
-public class CidadeAssembler {
+@Service
+public class CidadeService {
 
     private final CidadeRepository cidadeRepository;
 

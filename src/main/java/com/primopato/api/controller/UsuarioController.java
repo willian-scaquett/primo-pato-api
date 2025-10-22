@@ -33,7 +33,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "401", description = "Dados de autenticação inválidos")
     })
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.usuario(),
@@ -50,7 +50,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Dados de cadastro de usuário inválidos")
     })
     @PostMapping("/cadastrar")
-    public ResponseEntity<?> cadastrar(@RequestBody @Valid CadastroUsuarioRequest cadastroUsuarioRequest) {
+    public ResponseEntity<LoginResponse> cadastrar(@RequestBody @Valid CadastroUsuarioRequest cadastroUsuarioRequest) {
         Usuario usuario = usuarioService.criarUsuario(cadastroUsuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponse(jwtUtil.generateToken(usuario.getUsername())));
     }

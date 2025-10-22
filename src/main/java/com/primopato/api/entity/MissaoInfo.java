@@ -7,7 +7,6 @@ import com.primopato.api.enumerated.TamanhoRede;
 import com.primopato.api.utils.LocalizacaoUtils;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data

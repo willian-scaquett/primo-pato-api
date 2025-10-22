@@ -2,12 +2,12 @@ package com.primopato.api.service.assembler;
 
 import com.primopato.api.entity.*;
 import com.primopato.api.enumerated.*;
-import com.primopato.api.repository.MissaoInfoRepository;
-import com.primopato.api.service.PatoService;
 import com.primopato.api.utils.LocalizacaoUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class MissaoInfoAssembler {
@@ -17,15 +17,7 @@ public class MissaoInfoAssembler {
     //A cada 10 gramas do pago, o combustível rende 1km/l a menos
     private final static Float PESO_BASE_CALCULO_COMBUSTIVEL = 10f;
 
-    private final MissaoInfoRepository missaoInfoRepository;
-    private final PatoService patoService;
-
-    public MissaoInfo obterOuCriarMissaoInfo(Long idPato, String usuario) {
-        Pato pato = patoService.getPato(idPato, usuario);
-        return missaoInfoRepository.findByPato_IdAndPato_Usuario_usuario(idPato, usuario).orElseGet(() -> criarMissaoInfo(pato, null));
-    }
-
-    public MissaoInfo criarMissaoInfo(Pato pato, MissaoInfo missaoInfo) {
+    public MissaoInfo montarMissaoInfo(Pato pato, MissaoInfo missaoInfo) {
         if (missaoInfo == null) {
             missaoInfo = new MissaoInfo();
             missaoInfo.setPato(pato);
@@ -45,7 +37,7 @@ public class MissaoInfoAssembler {
         missaoInfo.setTamanhoRede(TamanhoRede.porAlturaPato(pato.getAltura()));
         missaoInfo.setRisco(calculaRisco(pato));
 
-        return missaoInfoRepository.save(missaoInfo);
+        return missaoInfo;
     }
 
     private ArmaDrone escolherArma(Pato pato) {

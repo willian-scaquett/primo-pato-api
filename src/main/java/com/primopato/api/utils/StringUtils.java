@@ -43,4 +43,11 @@ public class StringUtils {
 
         return resultado.toString();
     }
+
+    public static String coalesce(String... valores) {
+        for (String v : valores) {
+            if (v != null && !v.isBlank()) return v;
+        }
+        return null;
+    }
 }
