@@ -20,4 +20,4 @@
 ### Rodar API
 * ./mvnw spring-boot:run
 
-## Documentação (Swagger) [clique aqui.](http://130.107.74.13:8080/swagger-ui/index.html)
+## Documentação ([Swagger](http://130.107.74.13:8080/swagger-ui/index.html))
