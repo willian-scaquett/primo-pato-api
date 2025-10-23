@@ -17,21 +17,37 @@ public class PatoAssembler {
     public Pato montarPato(PatoRequest patoRequest, Usuario usuario, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao) {
         Pato pato = new Pato();
         pato.setUsuario(usuario);
-        return definirPato(patoRequest, drone, superPoder, pais, localizacao, pato);
+        return definirPato(
+                patoRequest,
+                drone,
+                superPoder,
+                pais,
+                localizacao,
+                pato,
+                pais.equals(LocalizacaoUtils.EUA)
+        );
     }
 
     public Pato editarPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato) {
-        return definirPato(patoRequest, drone, superPoder, pais, localizacao, pato);
+        Pais paisAntigo = pato.getLocalizacao().getCidade().getEstado().getPais();
+        return definirPato(
+                patoRequest,
+                drone,
+                superPoder,
+                pais,
+                localizacao,
+                pato,
+                pais.equals(LocalizacaoUtils.EUA) && !paisAntigo.equals(LocalizacaoUtils.EUA)
+        );
     }
 
-    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato) {
+    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato, boolean deveConverter) {
         pato.setDroneQueEncontrou(drone);
 
         //realiza as conversões quando necessário
-        boolean isEua = pais.equals(LocalizacaoUtils.EUA);
-        pato.setAltura(isEua ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
-        pato.setPeso(isEua ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
-        pato.setPrecisaoDoGpsQuandoEncontrado(isEua ? UnidadesUtils.jardaParaCentimetro(patoRequest.precisao()) : patoRequest.precisao());
+        pato.setAltura(deveConverter ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
+        pato.setPeso(deveConverter ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
+        pato.setPrecisaoDoGpsQuandoEncontrado(deveConverter ? UnidadesUtils.jardaParaCentimetro(patoRequest.precisao()) : patoRequest.precisao());
 
         pato.setLocalizacao(localizacao);
 

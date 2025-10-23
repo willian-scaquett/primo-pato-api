@@ -6,7 +6,6 @@ import com.primopato.api.entity.SuperPoder;
 import com.primopato.api.enumerated.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MissaoInfoAssemblerTest {
@@ -53,6 +52,23 @@ class MissaoInfoAssemblerTest {
     }
 
     @Test
+    void deveMontarMissaoInfoComSuperPoderTipoDiferente() {
+        Pato pato = criarPato(EstadoHibernacao.DESPERTO, TipoSuperPoder.VELOCIDADE, 100, 50f, 2, 200f);
+
+        MissaoInfo info = assembler.montarMissaoInfo(pato, null);
+
+        assertNotNull(info);
+        assertEquals(DefesaDrone.RADAR_INERCIAL_PREVISIVO, info.getDefesaDrone());
+        assertEquals(TamanhoRede.porAlturaPato(50f), info.getTamanhoRede());
+        assertEquals(Abordagem.COMBATIVO, info.getAbordagem());
+        assertEquals(ArmaDrone.ONDA_CHOQUE, info.getArmaDrone());
+        assertTrue(info.getRisco() > 0);
+        assertEquals(2 * pato.getEstadoHibernacao().getPotencializador(), info.getGanhoCientifico());
+        assertEquals(pato.getSuperPoder().getTipo().getGanhoParanormalBase() * pato.getEstadoHibernacao().getPotencializador(),
+                info.getGanhoParanormal());
+    }
+
+    @Test
     void deveMontarMissaoInfoSemSuperPoder() {
         Pato pato = criarPato(EstadoHibernacao.DESPERTO, null, null, 40f, 1, 150f);
 
@@ -65,6 +81,7 @@ class MissaoInfoAssemblerTest {
         assertEquals(1 * pato.getEstadoHibernacao().getPotencializador(), info.getGanhoCientifico());
         assertEquals(0, info.getGanhoParanormal());
     }
+
 
     @Test
     void deveEscolherArmaConformeEstadoHibernacao() {
