@@ -6,7 +6,6 @@ import com.primopato.api.enumerated.EstadoHibernacao;
 import com.primopato.api.record.PatoRequest;
 import com.primopato.api.repository.PatoRepository;
 import com.primopato.api.service.assembler.PatoAssembler;
-import com.primopato.api.utils.CustomStringUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
