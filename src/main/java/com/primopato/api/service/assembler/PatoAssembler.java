@@ -47,7 +47,7 @@ public class PatoAssembler {
         //realiza as conversões quando necessário
         pato.setAltura(deveConverter ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
         pato.setPeso(deveConverter ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
-        pato.setPrecisaoDoGpsQuandoEncontrado(deveConverter ? UnidadesUtils.jardaParaCentimetro(patoRequest.precisao()) : patoRequest.precisao());
+        pato.setPrecisaoDoGpsQuandoEncontrado(deveConverter ? UnidadesUtils.jardaParaMetro(patoRequest.precisao()) : patoRequest.precisao());
 
         pato.setLocalizacao(localizacao);
 

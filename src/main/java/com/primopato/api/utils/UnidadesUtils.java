@@ -15,8 +15,8 @@ public class UnidadesUtils {
         return medida * 453.59237f;
     }
 
-    public static Float jardaParaCentimetro(Float medida) {
-        // 1 jarda = 91,44 centímetros
-        return medida * 91.44f;
+    public static Float jardaParaMetro(Float medida) {
+        // 1 jarda = 0,9144 metro
+        return medida * 0.9144f;
     }
 }

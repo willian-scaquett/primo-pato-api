@@ -151,7 +151,7 @@ class PatoAssemblerTest {
 
         assertEquals(UnidadesUtils.peParaCentimetro(6f), resultado.getAltura());
         assertEquals(UnidadesUtils.libraParaGrama(10f), resultado.getPeso());
-        assertEquals(UnidadesUtils.jardaParaCentimetro(2f), resultado.getPrecisaoDoGpsQuandoEncontrado());
+        assertEquals(UnidadesUtils.jardaParaMetro(2f), resultado.getPrecisaoDoGpsQuandoEncontrado());
     }
 
     @Test
