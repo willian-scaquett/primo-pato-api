@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class LocalizacaoUtils {
 
-    public static final Pais EUA = new Pais("Estados Unidos");
+    public static final Pais EUA = new Pais("Estados Unidos da América");
     public static final Float COMBUSTIVEL_KM_L = 300f;
     public static final double LATITUDE_DSIN = -22.21389;
     public static final double LONGITUDE_DSIN = -49.94583;

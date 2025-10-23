@@ -195,18 +195,18 @@ class PaisServiceTest {
 
     @Test
     void deveTratarEntradaComEspacos() {
-        when(paisRepository.findByNome("Estados Unidos")).thenReturn(Optional.empty());
+        when(paisRepository.findByNome("Estados Unidos da América")).thenReturn(Optional.empty());
 
         Pais paisNovo = new Pais();
-        paisNovo.setNome("Estados Unidos");
+        paisNovo.setNome("Estados Unidos da América");
         when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
 
-        paisService.obterOuCriarPais("estados unidos");
+        paisService.obterOuCriarPais("estados unidos da américa");
 
         verify(paisRepository).save(paisCaptor.capture());
 
         Pais paisSalvo = paisCaptor.getValue();
-        assertEquals("Estados Unidos", paisSalvo.getNome());
+        assertEquals("Estados Unidos da América", paisSalvo.getNome());
     }
 
     @Test
