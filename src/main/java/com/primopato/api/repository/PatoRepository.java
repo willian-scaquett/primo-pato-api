@@ -18,6 +18,7 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
     LEFT JOIN FETCH p.superPoder s
     WHERE
         p.usuario.usuario = :usuario
+        AND (:todos is true OR p.capturado = :capturado)
         AND (:filtro = ''
         OR CONCAT(p.id, '') LIKE :filtro
         OR CONCAT(p.altura, '') LIKE :filtro
@@ -39,7 +40,7 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
         OR s.nome LIKE :filtro
         OR CONCAT(s.tipo, '') LIKE :filtro)
     """)
-    List<Pato> findAllByFiltro(String filtro, String usuario);
+    List<Pato> findAllByFiltro(String filtro, boolean todos, boolean capturado, String usuario);
 
     Optional<Pato> findByIdAndUsuario_Usuario(Long id, String usuario);
 }

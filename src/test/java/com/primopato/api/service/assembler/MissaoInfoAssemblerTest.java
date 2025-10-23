@@ -36,16 +36,16 @@ class MissaoInfoAssemblerTest {
     }
 
     @Test
-    void deveMontarMissaoInfoComSuperPoderESestadoNormal() {
-        Pato pato = criarPato(EstadoHibernacao.DESPERTO, TipoSuperPoder.VELOCIDADE, 100, 50f, 2, 200f);
+    void deveMontarMissaoInfoComSuperPoder() {
+        Pato pato = criarPato(EstadoHibernacao.DESPERTO, TipoSuperPoder.FOGO, 100, 50f, 2, 200f);
 
         MissaoInfo info = assembler.montarMissaoInfo(pato, null);
 
         assertNotNull(info);
-        assertEquals(DefesaDrone.RADAR_INERCIAL_PREVISIVO, info.getDefesaDrone());
+        assertEquals(DefesaDrone.CERAMICA_REFRATARIA, info.getDefesaDrone());
         assertEquals(TamanhoRede.porAlturaPato(50f), info.getTamanhoRede());
         assertEquals(Abordagem.COMBATIVO, info.getAbordagem());
-        assertEquals(ArmaDrone.ONDA_CHOQUE, info.getArmaDrone());
+        assertEquals(ArmaDrone.MISSIL_TELEGUIADO, info.getArmaDrone());
         assertTrue(info.getRisco() > 0);
         assertEquals(2 * pato.getEstadoHibernacao().getPotencializador(), info.getGanhoCientifico());
         assertEquals(pato.getSuperPoder().getTipo().getGanhoParanormalBase() * pato.getEstadoHibernacao().getPotencializador(),

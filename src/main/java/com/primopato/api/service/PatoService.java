@@ -76,9 +76,10 @@ public class PatoService {
                 .orElseThrow(() -> new EntityNotFoundException("Nenhum pato encontrado com o ID " + id + " para o usuário " + usuario));
     }
 
-    public List<Pato> buscarTodosFiltrado(String filtro, String usuario) {
+    public List<Pato> buscarTodosFiltrado(String filtro, Boolean capturado, String usuario) {
         log.info("Buscando patos");
-        return patoRepository.findAllByFiltro("%" + filtro.toUpperCase() + "%", usuario);
+        boolean todos = capturado == null;
+        return patoRepository.findAllByFiltro("%" + filtro.toUpperCase() + "%", todos, Boolean.TRUE.equals(capturado), usuario);
     }
 
     public Pato capturar(Long id, String usuario) {

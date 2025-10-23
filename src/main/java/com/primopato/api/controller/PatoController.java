@@ -59,9 +59,11 @@ public class PatoController {
     @Operation(summary = "Endpoint para buscar patos")
     @ApiResponse(responseCode = "200", description = "Patos buscados com sucesso")
     @GetMapping
-    public ResponseEntity<List<PatoResponse>> buscarTodosFiltrado(Authentication authentication, @RequestParam(required = false, defaultValue = "") String filtro) {
+    public ResponseEntity<List<PatoResponse>> buscarTodosFiltrado(Authentication authentication,
+                                                                  @RequestParam(required = false, defaultValue = "") String filtro,
+                                                                  @RequestParam(required = false, defaultValue = "") Boolean capturado) {
         return ResponseEntity.ok(
-                patoService.buscarTodosFiltrado(filtro, authentication.getName())
+                patoService.buscarTodosFiltrado(filtro, capturado, authentication.getName())
                         .stream()
                         .map(PatoResponse::new)
                         .toList()
