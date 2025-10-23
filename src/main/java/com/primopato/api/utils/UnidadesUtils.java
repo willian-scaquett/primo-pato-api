@@ -1,5 +1,8 @@
 package com.primopato.api.utils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class UnidadesUtils {
 
     public static Float peParaCentimetro(Float medida) {

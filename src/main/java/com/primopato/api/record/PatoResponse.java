@@ -1,7 +1,8 @@
 package com.primopato.api.record;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.primopato.api.entity.Pato;
+import com.primopato.api.utils.Float2CasasSerializer;
 
 public record PatoResponse(
         Long id,
@@ -9,20 +10,18 @@ public record PatoResponse(
         String modeloDrone,
         String fabricanteDrone,
         String paisDrone,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float altura,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float peso,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         double latitude,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
         double longitude,
         String pais,
         String estado,
         String cidade,
         String pontoReferencia,
         String endereco,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float precisao,
         String estadoHibernacao,
         Integer bpm,

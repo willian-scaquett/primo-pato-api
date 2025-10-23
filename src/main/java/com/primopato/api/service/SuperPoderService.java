@@ -3,7 +3,7 @@ package com.primopato.api.service;
 import com.primopato.api.entity.SuperPoder;
 import com.primopato.api.enumerated.TipoSuperPoder;
 import com.primopato.api.repository.SuperPoderRepository;
-import com.primopato.api.utils.StringUtils;
+import com.primopato.api.utils.CustomStringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,13 @@ public class SuperPoderService {
     private final SuperPoderRepository superPoderRepository;
 
     public List<SuperPoder> carregarSuperPoderes(TipoSuperPoder tipoSuperPoder) {
+        log.info("Carregando super-poderes");
         return superPoderRepository.findAllByTipo(tipoSuperPoder);
     }
 
     public SuperPoder obterOuCriarSuperPoder(String nome, TipoSuperPoder tipo) {
-        String nomeFormatado = StringUtils.formataIncialMaiuscula(nome);
+        log.info("Buscando super-poder {}", nome);
+        String nomeFormatado = CustomStringUtils.formataIncialMaiuscula(nome);
         return superPoderRepository
                 .findByNomeAndTipo(nome, tipo)
                 .orElseGet(() -> {

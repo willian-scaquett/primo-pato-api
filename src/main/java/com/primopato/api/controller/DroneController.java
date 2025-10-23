@@ -4,7 +4,6 @@ import com.primopato.api.record.DropDownResponse;
 import com.primopato.api.service.DroneService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +18,7 @@ public class DroneController {
     private final DroneService droneService;
 
     @Operation(summary = "Endpoint para listar fabricantes de drone")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Fabricantes buscados com sucesso")
-    })
+    @ApiResponse(responseCode = "200", description = "Fabricantes buscados com sucesso")
     @GetMapping("/pais/{idPais}/fabricante")
     public ResponseEntity<List<DropDownResponse>> listarFabricantes(@PathVariable Long idPais) {
         return ResponseEntity.ok(
@@ -33,9 +30,7 @@ public class DroneController {
     }
 
     @Operation(summary = "Endpoint para listar modelos de drone de um fabricante")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Modelos buscados com sucesso")
-    })
+    @ApiResponse(responseCode = "200", description = "Modelos buscados com sucesso")
     @GetMapping("/fabricante/{idFabricante}/modelo")
     public ResponseEntity<List<DropDownResponse>> listarModelos(@PathVariable Long idFabricante) {
         return ResponseEntity.ok(
@@ -47,9 +42,7 @@ public class DroneController {
     }
 
     @Operation(summary = "Endpoint para listar números de série de drone de um modelo")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Números de série buscados com sucesso")
-    })
+    @ApiResponse(responseCode = "200", description = "Números de série buscados com sucesso")
     @GetMapping("/modelo/{idModelo}/numeroSerie")
     public ResponseEntity<List<DropDownResponse>> listarNumerosSerie(@PathVariable Long idModelo) {
         return ResponseEntity.ok(

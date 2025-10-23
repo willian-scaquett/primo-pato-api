@@ -1,10 +1,13 @@
 package com.primopato.api.utils;
 
+import lombok.experimental.UtilityClass;
+
 import java.text.BreakIterator;
 import java.util.List;
 import java.util.Locale;
 
-public class StringUtils {
+@UtilityClass
+public class CustomStringUtils {
 
     private static final List<String> EXCECAO_INICIAL_MAIUSCULA = List.of(
             "o", "a", "os", "as", "um", "uma", "uns", "umas",

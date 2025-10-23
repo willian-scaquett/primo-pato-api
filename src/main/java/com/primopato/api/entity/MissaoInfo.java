@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Entity
 public class MissaoInfo {
 
-    private final static BigDecimal PRECO_COMBUSTIVEL = new BigDecimal("12.12");
+    private static final BigDecimal PRECO_COMBUSTIVEL = new BigDecimal("12.12");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +47,18 @@ public class MissaoInfo {
 
     @Column
     private TamanhoRede tamanhoRede;
+
+    public void setRisco(Float risco) {
+        this.risco = Math.min(risco, 100);
+    }
+
+    public void setGanhoCientifico(Float ganhoCientifico) {
+        this.ganhoCientifico = Math.min(ganhoCientifico, 100);
+    }
+
+    public void setGanhoParanormal(Float ganhoParanormal) {
+        this.ganhoParanormal = Math.min(ganhoParanormal, 100);
+    }
 
     public BigDecimal getCusto(Double quantidadeCombustivel) {
         return defesaDrone.getPreco()

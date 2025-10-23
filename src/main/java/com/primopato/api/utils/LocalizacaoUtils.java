@@ -1,13 +1,15 @@
 package com.primopato.api.utils;
 
 import com.primopato.api.entity.Pais;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class LocalizacaoUtils {
 
-    public final static Pais EUA = new Pais("Estados Unidos");
-    public final static Float COMBUSTIVEL_KM_L = 300f;
-    public final static double LATITUDE_DSIN = -22.21389;
-    public final static double LONGITUDE_DSIN = -49.94583;
+    public static final Pais EUA = new Pais("Estados Unidos");
+    public static final Float COMBUSTIVEL_KM_L = 300f;
+    public static final double LATITUDE_DSIN = -22.21389;
+    public static final double LONGITUDE_DSIN = -49.94583;
 
     //Usado para calcular a distância entre o alvo e a base de operações
     public static double distanciaKmEntreDsinECoordenadas(double lat, double lon) {

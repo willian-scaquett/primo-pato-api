@@ -2,7 +2,6 @@ package com.primopato.api.service;
 
 import com.primopato.api.entity.MissaoInfo;
 import com.primopato.api.entity.Pato;
-import com.primopato.api.record.MissaoInfoResponse;
 import com.primopato.api.repository.MissaoInfoRepository;
 import com.primopato.api.service.assembler.MissaoInfoAssembler;
 import lombok.RequiredArgsConstructor;
@@ -21,37 +20,15 @@ public class MissaoInfoService {
     public MissaoInfo obterOuCriarMissaoInfo(Long idPato, String usuario) {
         Pato pato = patoService.getPato(idPato, usuario);
 
+        log.info("Buscando informação de missão para o pato {}", idPato);
+
         return missaoInfoRepository
                 .findByPatoAndPato_Usuario_usuario(pato, usuario)
                 .orElseGet(() -> {
-                    log.info("Informação de missão não encontrada. Criando nova para pato ID: {}", idPato);
+                    log.info("Informação de missão não encontrada. Criando nova para o pato {}", idPato);
                     return missaoInfoRepository.save(
                         missaoInfoAssembler.montarMissaoInfo(pato, null)
                     );
                 });
-    }
-
-    public MissaoInfoResponse montarMissaoInfoResponse(Long idPato, String usuario) {
-        MissaoInfo missaoInfo = obterOuCriarMissaoInfo(idPato, usuario);
-
-        double gastoCombustivelIda = missaoInfo.getGastoCombustivelIda();
-        double gastoCombustivelVolta = missaoInfo.getGastoCombustivelVolta();
-        double gastoCombustivelTotal = gastoCombustivelIda + gastoCombustivelVolta;
-
-        return new MissaoInfoResponse(
-                missaoInfo.getPato().getId(),
-                missaoInfo.getDefesaDrone().getNome(),
-                missaoInfo.getDistancia(),
-                gastoCombustivelIda,
-                gastoCombustivelVolta,
-                gastoCombustivelTotal,
-                missaoInfo.getRisco(),
-                missaoInfo.getGanhoCientifico(),
-                missaoInfo.getGanhoParanormal(),
-                missaoInfo.getArmaDrone().getNome(),
-                missaoInfo.getAbordagem().getNome(),
-                missaoInfo.getTamanhoRede().getNome(),
-                missaoInfo.getCusto(gastoCombustivelTotal)
-        );
     }
 }

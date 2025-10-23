@@ -3,7 +3,7 @@ package com.primopato.api.service.geocoding;
 import com.opencagedata.jopencage.JOpenCageGeocoder;
 import com.opencagedata.jopencage.model.JOpenCageResult;
 import com.opencagedata.jopencage.model.JOpenCageReverseRequest;
-import com.primopato.api.utils.StringUtils;
+import com.primopato.api.utils.CustomStringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +26,9 @@ public class OpenCageGeocodingProvider implements GeocodingProvider {
 
         return new GeocodingResult(
                 result.getFormatted(),
-                StringUtils.coalesce(result.getComponents().getCity(), result.getComponents().getTown(), result.getComponents().getVillage(), result.getComponents().getCityDistrict(), LOCAL_SEM_NOME),
-                StringUtils.coalesce(result.getComponents().getState(), LOCAL_SEM_NOME),
-                StringUtils.coalesce(result.getComponents().getCountry(), LOCAL_SEM_NOME)
+                CustomStringUtils.coalesce(result.getComponents().getCity(), result.getComponents().getTown(), result.getComponents().getVillage(), result.getComponents().getCityDistrict(), LOCAL_SEM_NOME),
+                CustomStringUtils.coalesce(result.getComponents().getState(), LOCAL_SEM_NOME),
+                CustomStringUtils.coalesce(result.getComponents().getCountry(), LOCAL_SEM_NOME)
         );
     }
 }

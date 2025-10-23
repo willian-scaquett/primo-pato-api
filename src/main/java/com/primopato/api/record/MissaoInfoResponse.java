@@ -1,28 +1,50 @@
 package com.primopato.api.record;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.primopato.api.entity.MissaoInfo;
+import com.primopato.api.utils.Float2CasasSerializer;
+
 import java.math.BigDecimal;
 
 public record MissaoInfoResponse(
         long idPato,
         String defesaRecomendada,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         double distancia,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         double gastoCombustivelIda,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         double gastoCombustivelVolta,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         double gastoCombustivelTotal,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float risco,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float ganhoCientifico,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         float ganhoParanormal,
         String armaRecomendada,
         String abordagemRecomendada,
         String tamanhoRedeNecessaria,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        @JsonSerialize(using = Float2CasasSerializer.class)
         BigDecimal custo
-) {}
+) {
+    public MissaoInfoResponse(MissaoInfo missaoInfo) {
+        this(
+                missaoInfo.getPato().getId(),
+                missaoInfo.getDefesaDrone().getNome(),
+                missaoInfo.getDistancia(),
+                missaoInfo.getGastoCombustivelIda(),
+                missaoInfo.getGastoCombustivelVolta(),
+                missaoInfo.getGastoCombustivelIda() + missaoInfo.getGastoCombustivelVolta(),
+                missaoInfo.getRisco(),
+                missaoInfo.getGanhoCientifico(),
+                missaoInfo.getGanhoParanormal(),
+                missaoInfo.getArmaDrone().getNome(),
+                missaoInfo.getAbordagem().getNome(),
+                missaoInfo.getTamanhoRede().getNome(),
+                missaoInfo.getCusto(missaoInfo.getGastoCombustivelIda() + missaoInfo.getGastoCombustivelVolta())
+        );
+    }
+}

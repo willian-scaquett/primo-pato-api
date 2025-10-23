@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class MissaoInfoAssembler {
 
-    private final static Integer BPM_BASE_ABORDAGEM = 200;
-    private final static Float BPM_BASE_RISCO = 130f;
+    private static final Integer BPM_BASE_ABORDAGEM = 200;
+    private static final Float BPM_BASE_RISCO = 130f;
     //A cada 10 gramas do pago, o combustível rende 1km/l a menos
-    private final static Float PESO_BASE_CALCULO_COMBUSTIVEL = 10f;
+    private static final Float PESO_BASE_CALCULO_COMBUSTIVEL = 10f;
 
     public MissaoInfo montarMissaoInfo(Pato pato, MissaoInfo missaoInfo) {
         if (missaoInfo == null) {

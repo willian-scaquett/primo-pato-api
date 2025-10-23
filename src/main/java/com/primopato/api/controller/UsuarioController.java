@@ -8,7 +8,6 @@ import com.primopato.api.security.JwtUtil;
 import com.primopato.api.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +27,8 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @Operation(summary = "Endpoint para login")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Dados de autenticação inválidos")
-    })
+    @ApiResponse(responseCode = "200", description = "Login realizado com sucesso")
+    @ApiResponse(responseCode = "401", description = "Dados de autenticação inválidos")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         authenticationManager.authenticate(
@@ -45,10 +42,8 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Endpoint para cadastro de usuário")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Cadastro de usuário realizado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Dados de cadastro de usuário inválidos")
-    })
+    @ApiResponse(responseCode = "201", description = "Cadastro de usuário realizado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Dados de cadastro de usuário inválidos")
     @PostMapping("/cadastrar")
     public ResponseEntity<LoginResponse> cadastrar(@RequestBody @Valid CadastroUsuarioRequest cadastroUsuarioRequest) {
         Usuario usuario = usuarioService.criarUsuario(cadastroUsuarioRequest);
