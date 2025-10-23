@@ -77,18 +77,15 @@ class PatoAssemblerTest {
     void deveEditarPatoComSucesso() {
         Pais paisExistente = new Pais();
         paisExistente.setNome("Brasil");
-        Estado estadoExistente = new Estado();
-        estadoExistente.setNome("São Paulo");
-        estadoExistente.setPais(paisExistente);
-        Cidade cidadeExistente = new Cidade();
-        cidadeExistente.setNome("Marília");
-        cidadeExistente.setEstado(estadoExistente);
-        Localizacao localizaoExistente = new Localizacao();
-        localizaoExistente.setCidade(cidadeExistente);
+        FabricanteDrone fabricanteExistente = new FabricanteDrone();
+        fabricanteExistente.setPais(paisExistente);
+        ModeloDrone modeloExistente = new ModeloDrone();
+        modeloExistente.setFabricante(fabricanteExistente);
+        Drone droneExistente = new Drone();
+        droneExistente.setModelo(modeloExistente);
         Pato patoExistente = new Pato();
-        patoExistente.setLocalizacao(localizaoExistente);
+        patoExistente.setDroneQueEncontrou(droneExistente);
 
-        patoExistente.setLocalizacao(localizaoExistente);
         PatoRequest request = new PatoRequest(
                 "123ABC",
                 "DroneX",

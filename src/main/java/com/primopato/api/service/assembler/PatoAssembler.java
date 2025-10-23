@@ -28,14 +28,14 @@ public class PatoAssembler {
     }
 
     public Pato editarPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato) {
-        Pais paisAntigo = pato.getLocalizacao().getCidade().getEstado().getPais();
+        Pais paisAntigoDrone = pato.getDroneQueEncontrou().getModelo().getFabricante().getPais();
         return definirPato(
                 patoRequest,
                 drone,
                 superPoder,
                 localizacao,
                 pato,
-                pais.equals(LocalizacaoUtils.EUA) && !paisAntigo.equals(LocalizacaoUtils.EUA)
+                pais.equals(LocalizacaoUtils.EUA) && !paisAntigoDrone.equals(LocalizacaoUtils.EUA)
         );
     }
 
