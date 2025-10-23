@@ -29,8 +29,8 @@ public record PatoRequest(
         String cidade,
         String pontoReferencia,
         String endereco,
-        @DecimalMin(value = "0.04", message = "precisão mínima é 4cm ou 0.043745yd")
-        @DecimalMax(value = "32.8084", message = "precisão máxima é 30m ou 32.8084yd")
+        @DecimalMin(value = "0.04", message = "precisão mínima é 4cm")
+        @DecimalMax(value = "30", message = "precisão máxima é 30m")
         float precisao,
         @NotNull(message = "estadoHibernacao é obrigatório")
         EstadoHibernacao estadoHibernacao,

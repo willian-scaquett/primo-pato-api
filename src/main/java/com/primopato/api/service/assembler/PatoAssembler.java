@@ -21,7 +21,6 @@ public class PatoAssembler {
                 patoRequest,
                 drone,
                 superPoder,
-                pais,
                 localizacao,
                 pato,
                 pais.equals(LocalizacaoUtils.EUA)
@@ -34,21 +33,20 @@ public class PatoAssembler {
                 patoRequest,
                 drone,
                 superPoder,
-                pais,
                 localizacao,
                 pato,
                 pais.equals(LocalizacaoUtils.EUA) && !paisAntigo.equals(LocalizacaoUtils.EUA)
         );
     }
 
-    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato, boolean deveConverter) {
+    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Localizacao localizacao, Pato pato, boolean deveConverter) {
         pato.setDroneQueEncontrou(drone);
 
         //realiza as conversões quando necessário
         pato.setAltura(deveConverter ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
         pato.setPeso(deveConverter ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
-        pato.setPrecisaoDoGpsQuandoEncontrado(deveConverter ? UnidadesUtils.jardaParaMetro(patoRequest.precisao()) : patoRequest.precisao());
 
+        pato.setPrecisaoDoGpsQuandoEncontrado(patoRequest.precisao());
         pato.setLocalizacao(localizacao);
 
         pato.setQuantidadeMutacoes(patoRequest.quantidadeMutacoes());

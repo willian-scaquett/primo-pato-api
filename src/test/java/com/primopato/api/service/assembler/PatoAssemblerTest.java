@@ -75,7 +75,20 @@ class PatoAssemblerTest {
 
     @Test
     void deveEditarPatoComSucesso() {
+        Pais paisExistente = new Pais();
+        paisExistente.setNome("Brasil");
+        Estado estadoExistente = new Estado();
+        estadoExistente.setNome("São Paulo");
+        estadoExistente.setPais(paisExistente);
+        Cidade cidadeExistente = new Cidade();
+        cidadeExistente.setNome("Marília");
+        cidadeExistente.setEstado(estadoExistente);
+        Localizacao localizaoExistente = new Localizacao();
+        localizaoExistente.setCidade(cidadeExistente);
         Pato patoExistente = new Pato();
+        patoExistente.setLocalizacao(localizaoExistente);
+
+        patoExistente.setLocalizacao(localizaoExistente);
         PatoRequest request = new PatoRequest(
                 "123ABC",
                 "DroneX",
@@ -147,11 +160,10 @@ class PatoAssemblerTest {
         Localizacao localizacao = new Localizacao();
         Pais pais = LocalizacaoUtils.EUA;
 
-        Pato resultado = patoAssembler.definirPato(request, drone, superPoder, pais, localizacao, pato);
+        Pato resultado = patoAssembler.definirPato(request, drone, superPoder, localizacao, pato, true);
 
         assertEquals(UnidadesUtils.peParaCentimetro(6f), resultado.getAltura());
         assertEquals(UnidadesUtils.libraParaGrama(10f), resultado.getPeso());
-        assertEquals(UnidadesUtils.jardaParaMetro(2f), resultado.getPrecisaoDoGpsQuandoEncontrado());
     }
 
     @Test
@@ -182,11 +194,11 @@ class PatoAssemblerTest {
         Pais pais = new Pais();
         Localizacao localizacao = new Localizacao();
 
-        Pato patoDesperto = patoAssembler.definirPato(requestDesperto, drone, superPoder, pais, localizacao, new Pato());
+        Pato patoDesperto = patoAssembler.definirPato(requestDesperto, drone, superPoder, localizacao, new Pato(), false);
         assertEquals(superPoder, patoDesperto.getSuperPoder());
         assertNull(patoDesperto.getBpm());
 
-        Pato patoHibernando = patoAssembler.definirPato(requestHibernando, drone, superPoder, pais, localizacao, new Pato());
+        Pato patoHibernando = patoAssembler.definirPato(requestHibernando, drone, superPoder, localizacao, new Pato(), false);
         assertEquals(150, patoHibernando.getBpm());
         assertNull(patoHibernando.getSuperPoder());
     }
