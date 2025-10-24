@@ -22,29 +22,27 @@ public class PatoAssembler {
                 drone,
                 superPoder,
                 localizacao,
-                pato,
-                pais.equals(LocalizacaoUtils.EUA)
+                pato
         );
     }
 
     public Pato editarPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Pais pais, Localizacao localizacao, Pato pato) {
-        Pais paisAntigoDrone = pato.getDroneQueEncontrou().getModelo().getFabricante().getPais();
         return definirPato(
                 patoRequest,
                 drone,
                 superPoder,
                 localizacao,
-                pato,
-                pais.equals(LocalizacaoUtils.EUA) && !paisAntigoDrone.equals(LocalizacaoUtils.EUA)
+                pato
         );
     }
 
-    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Localizacao localizacao, Pato pato, boolean deveConverter) {
+    public Pato definirPato(PatoRequest patoRequest, Drone drone, SuperPoder superPoder, Localizacao localizacao, Pato pato) {
         pato.setDroneQueEncontrou(drone);
 
         //realiza as conversões quando necessário
-        pato.setAltura(deveConverter ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
-        pato.setPeso(deveConverter ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
+        boolean isEua = LocalizacaoUtils.EUA.equals(drone.getModelo().getFabricante().getPais());
+        pato.setAltura(isEua ? UnidadesUtils.peParaCentimetro(patoRequest.altura()) : patoRequest.altura());
+        pato.setPeso(isEua ? UnidadesUtils.libraParaGrama(patoRequest.peso()) : patoRequest.peso());
 
         pato.setPrecisaoDoGpsQuandoEncontrado(patoRequest.precisao());
         pato.setLocalizacao(localizacao);

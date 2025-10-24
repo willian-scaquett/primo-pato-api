@@ -3,6 +3,8 @@ package com.primopato.api.record;
 import com.primopato.api.entity.Pato;
 import com.primopato.api.enumerated.EstadoHibernacao;
 import com.primopato.api.enumerated.TipoSuperPoder;
+import com.primopato.api.utils.LocalizacaoUtils;
+import com.primopato.api.utils.UnidadesUtils;
 import jakarta.validation.constraints.*;
 
 public record PatoRequest(
@@ -47,8 +49,12 @@ public record PatoRequest(
                 pato.getDroneQueEncontrou().getModelo().getNome(),
                 pato.getDroneQueEncontrou().getModelo().getFabricante().getNome(),
                 pato.getDroneQueEncontrou().getModelo().getFabricante().getPais().getNome(),
-                pato.getAltura(),
-                pato.getPeso(),
+                LocalizacaoUtils.EUA.equals(pato.getDroneQueEncontrou().getModelo().getFabricante().getPais())
+                        ? UnidadesUtils.centimetroParaPé(pato.getAltura())
+                        : pato.getAltura(),
+                LocalizacaoUtils.EUA.equals(pato.getDroneQueEncontrou().getModelo().getFabricante().getPais())
+                        ? UnidadesUtils.gramaParaLibra(pato.getPeso())
+                        : pato.getPeso(),
                 pato.getLocalizacao().getCoordenadas().getLatitude(),
                 pato.getLocalizacao().getCoordenadas().getLongitude(),
                 pato.getLocalizacao().getCidade().getEstado().getPais().getNome(),
