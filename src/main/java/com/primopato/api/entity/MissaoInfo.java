@@ -60,6 +60,10 @@ public class MissaoInfo {
         this.ganhoParanormal = Math.min(ganhoParanormal, 100);
     }
 
+    public void setDesempenhoCombustivelPorLitroPosCaputura(Float desempenhoCombustivelPorLitroPosCaputura) {
+        this.desempenhoCombustivelPorLitroPosCaputura = Math.max(desempenhoCombustivelPorLitroPosCaputura, 1);
+    }
+
     public BigDecimal getCusto(Double quantidadeCombustivel) {
         return defesaDrone.getPreco()
                 .add(PRECO_COMBUSTIVEL.multiply(BigDecimal.valueOf(quantidadeCombustivel)))
