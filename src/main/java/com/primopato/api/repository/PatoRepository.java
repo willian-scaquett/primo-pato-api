@@ -39,7 +39,7 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
         OR d.modelo.fabricante.nome LIKE :filtro
         OR s.nome LIKE :filtro
         OR CONCAT(s.tipo, '') LIKE :filtro)
-    ORDER BY p.id ASC
+    ORDER BY p.id DESC
     """)
     List<Pato> findAllByFiltro(String filtro, boolean todos, boolean capturado, String usuario);
 
