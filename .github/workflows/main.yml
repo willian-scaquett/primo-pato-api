@@ -10,45 +10,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do código
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2️⃣ Configura JDK 21
       - name: Configurar JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      # 3️⃣ Compila o projeto com Maven
       - name: Build com Maven
         run: mvn clean package -DskipTests
 
-      # 4️⃣ Debug para garantir arquivos existam
-      - name: Debug arquivos
-        run: ls -l target/ Dockerfile docker-compose.yml
+      - name: Criar chave SSH temporária
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
 
-      # 5️⃣ Copia .jar, Dockerfile e docker-compose.yml para a VM
       - name: Copiar arquivos para VM
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: "130.107.74.13"
-          username: "kaique-ssh"
-          key_path: "./id_rsa_azure.pem"
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key_path: "./private_key.pem"
           source: "."
           target: "~/app"
 
-      # 6️⃣ Deploy via Docker Compose na VM
       - name: Deploy Docker Compose na VM
         uses: appleboy/ssh-action@v1.1.0
         with:
-          host: "130.107.74.13"
-          username: "kaique-ssh"
-          key_path: "./id_rsa_azure.pem"
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key_path: "./private_key.pem"
           script: |
-            cd /home/kaique-ssh/app
+            cd /home/${{ secrets.VM_USER }}/app
             echo "==== Subindo container via Docker Compose ===="
             sudo docker-compose down || true
             sudo docker-compose up -d --build
             echo "✅ Deploy finalizado!"
+
+      - name: Limpar chave temporária
+        if: always()
+        run: rm -f private_key.pem
