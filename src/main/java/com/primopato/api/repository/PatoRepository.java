@@ -1,6 +1,7 @@
 package com.primopato.api.repository;
 
 import com.primopato.api.entity.Pato;
+import com.primopato.api.record.PatoContadorResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -44,4 +45,8 @@ public interface PatoRepository extends JpaRepository<Pato, Long> {
     List<Pato> findAllByFiltro(String filtro, boolean todos, boolean capturado, String usuario);
 
     Optional<Pato> findByIdAndUsuario_Usuario(Long id, String usuario);
+
+    @Query("SELECT new com.primopato.api.record.PatoContadorResponse(p.capturado, COUNT(p)) "
+            + "FROM Pato p WHERE p.usuario.usuario = :usuario GROUP BY p.capturado")
+    List<PatoContadorResponse> contarPatosPorStatusCaptura(String usuario);
 }
