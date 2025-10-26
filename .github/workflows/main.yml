@@ -24,16 +24,20 @@ jobs:
 
       - name: Criar chave SSH temporária
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: Copiar arquivos para VM
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
-          key_path: "./private_key.pem"
-          source: "."
+          key_path: "~/.ssh/id_rsa"
+          source: |
+            target/*.jar
+            Dockerfile
+            docker-compose.yml
           target: "~/app"
 
       - name: Deploy Docker Compose na VM
@@ -41,7 +45,7 @@ jobs:
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
-          key_path: "./private_key.pem"
+          key_path: "~/.ssh/id_rsa"
           script: |
             cd /home/${{ secrets.VM_USER }}/app
             echo "==== Subindo container via Docker Compose ===="
@@ -51,4 +55,4 @@ jobs:
 
       - name: Limpar chave temporária
         if: always()
-        run: rm -f private_key.pem
+        run: rm -f ~/.ssh/id_rsa
