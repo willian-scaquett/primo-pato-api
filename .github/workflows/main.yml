@@ -40,7 +40,6 @@ jobs:
             cd ~/app
             echo "==== Criando .env ===="
             cat <<EOF > .env
-            DB_URL=${{ secrets.DB_URL }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             EMAIL_KEY=${{ secrets.EMAIL_KEY }}
