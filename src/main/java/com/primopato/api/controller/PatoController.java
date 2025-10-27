@@ -31,7 +31,9 @@ public class PatoController {
     @ApiResponse(responseCode = "201", description = "Pato cadastrado com sucesso")
     @PostMapping("/cadastrar")
     public ResponseEntity<PatoResponse> cadastrarPato(Authentication authentication, @Valid @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PatoResponse(patoService.cadastrar(patoRequest, authentication.getName())));
+        PatoResponse response = new PatoResponse(patoService.cadastrar(patoRequest, authentication.getName()));
+        missaoInfoService.obterOuCriarMissaoInfo(response.id(), authentication.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(summary = "Endpoint para edição de pato")
