@@ -2,6 +2,7 @@ package com.primopato.api.controller;
 
 import com.primopato.api.entity.Usuario;
 import com.primopato.api.record.CadastroUsuarioRequest;
+import com.primopato.api.record.EsqueciSenhaRequest;
 import com.primopato.api.record.LoginRequest;
 import com.primopato.api.record.LoginResponse;
 import com.primopato.api.security.JwtUtil;
@@ -48,5 +49,14 @@ public class UsuarioController {
     public ResponseEntity<LoginResponse> cadastrar(@RequestBody @Valid CadastroUsuarioRequest cadastroUsuarioRequest) {
         Usuario usuario = usuarioService.criarUsuario(cadastroUsuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponse(jwtUtil.generateToken(usuario.getUsername())));
+    }
+
+    @Operation(summary = "Endpoint para recuperação de senha")
+    @ApiResponse(responseCode = "200", description = "Nova senha enviada para o e-mail cadastrado")
+    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    @PostMapping("/esqueci-senha")
+    public ResponseEntity<String> esqueciSenha(@RequestBody @Valid EsqueciSenhaRequest esqueciSenhaRequest) {
+        usuarioService.resetarSenha(esqueciSenhaRequest.email());
+        return ResponseEntity.ok("Nova senha enviada para o e-mail cadastrado");
     }
 }
