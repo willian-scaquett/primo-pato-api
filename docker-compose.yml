@@ -8,5 +8,7 @@ services:
       - DB_URL=jdbc:jdbc:postgresql://quackdb.postgres.database.azure.com:5432/postgres
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+      - EMAIL_KEY=${EMAIL_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
     ports:
       - "8888:8888"
