@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public enum ArmaDrone {
     //Cada arma e seu respectivo valor em patocoins
-    CAPSULA_CONGELAMENTO("Capsula de Congelamento", new BigDecimal(350)),
+    CAPSULA_CONGELAMENTO("Cápsula de Congelamento", new BigDecimal(350)),
     AGUA_BENTA("Água Benta", new BigDecimal(10)),
     RAIO_LASER("Raio Laser", new BigDecimal(400)),
     ONDA_CHOQUE("Onda de Choque", new BigDecimal(900)),
