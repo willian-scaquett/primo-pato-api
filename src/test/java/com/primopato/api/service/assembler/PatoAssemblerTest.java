@@ -172,7 +172,7 @@ class PatoAssemblerTest {
         modeloDrone.setFabricante(fabricanteDrone);
         drone.setModelo(modeloDrone);
 
-        Pato resultado = patoAssembler.definirPato(request, drone, superPoder, localizacao, pato);
+        Pato resultado = patoAssembler.definirPato(request, drone, superPoder, localizacao, pato, true);
 
         assertEquals(UnidadesUtils.peParaCentimetro(6f), resultado.getAltura());
         assertEquals(UnidadesUtils.libraParaGrama(10f), resultado.getPeso());
@@ -211,11 +211,11 @@ class PatoAssemblerTest {
         modeloDrone.setFabricante(fabricanteDrone);
         drone.setModelo(modeloDrone);
 
-        Pato patoDesperto = patoAssembler.definirPato(requestDesperto, drone, superPoder, localizacao, new Pato());
+        Pato patoDesperto = patoAssembler.definirPato(requestDesperto, drone, superPoder, localizacao, new Pato(), true);
         assertEquals(superPoder, patoDesperto.getSuperPoder());
         assertNull(patoDesperto.getBpm());
 
-        Pato patoHibernando = patoAssembler.definirPato(requestHibernando, drone, superPoder, localizacao, new Pato());
+        Pato patoHibernando = patoAssembler.definirPato(requestHibernando, drone, superPoder, localizacao, new Pato(), true);
         assertEquals(150, patoHibernando.getBpm());
         assertNull(patoHibernando.getSuperPoder());
     }

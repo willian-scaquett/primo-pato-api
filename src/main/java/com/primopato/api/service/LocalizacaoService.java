@@ -40,7 +40,7 @@ public class LocalizacaoService {
         GeocodingResult geocodingResult = geocodingProvider.reverse(patoRequest.latitude(), patoRequest.longitude());
 
         Pais pais = paisService.obterOuCriarPais(CustomStringUtils.coalesce(patoRequest.pais(), geocodingResult.pais()));
-        Estado estado = estadoService.obterOuCriarEstado(CustomStringUtils.coalesce(patoRequest.pais(), geocodingResult.estado()), pais);
+        Estado estado = estadoService.obterOuCriarEstado(CustomStringUtils.coalesce(patoRequest.estado(), geocodingResult.estado()), pais);
 
         return localizacaoRepository.save(
                 localizacaoAssembler.montarLocalizacao(

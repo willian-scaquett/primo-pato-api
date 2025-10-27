@@ -2,13 +2,16 @@ package com.primopato.api.service;
 
 import com.primopato.api.entity.Usuario;
 import com.primopato.api.record.CadastroUsuarioRequest;
+import com.primopato.api.record.MudarSenhaRequest;
 import com.primopato.api.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.security.InvalidParameterException;
+import java.security.SecureRandom;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public Usuario criarUsuario(CadastroUsuarioRequest cadastroUsuarioRequest) {
         if (usuarioRepository.existsByUsuario(cadastroUsuarioRequest.usuario())) {
@@ -38,5 +42,59 @@ public class UsuarioService {
         log.info("Buscando usuário {}", usuario);
         return usuarioRepository.findByUsuario(usuario)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    }
+
+    public void resetarSenha(String email) {
+        Usuario usuario = usuarioRepository.findByUsuario(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o e-mail: " + email));
+
+        String novaSenha = gerarSenhaAleatoria();
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuarioRepository.save(usuario);
+
+        emailService.enviarNovaSenha(email, novaSenha);
+    }
+
+    private String gerarSenhaAleatoria() {
+        String maiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String minusculas = "abcdefghijklmnopqrstuvwxyz";
+        String numeros = "0123456789";
+        String especiais = "!@#$%&*";
+        String todosCaracteres = maiusculas + minusculas + numeros + especiais;
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder senha = new StringBuilder(8);
+
+        senha.append(maiusculas.charAt(random.nextInt(maiusculas.length())));
+        senha.append(minusculas.charAt(random.nextInt(minusculas.length())));
+        senha.append(numeros.charAt(random.nextInt(numeros.length())));
+        senha.append(especiais.charAt(random.nextInt(especiais.length())));
+
+        for (int i = 4; i < 8; i++) {
+            senha.append(todosCaracteres.charAt(random.nextInt(todosCaracteres.length())));
+        }
+
+        char[] caracteres = senha.toString().toCharArray();
+        for (int i = caracteres.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = caracteres[i];
+            caracteres[i] = caracteres[j];
+            caracteres[j] = temp;
+        }
+
+        return new String(caracteres);
+    }
+
+    public void mudarSenha(String usuario, @Valid MudarSenhaRequest mudarSenhaRequest) {
+        log.info("Mudando senha do {}", usuario);
+        Usuario u = getUsuario(usuario);
+        u.setSenha(passwordEncoder.encode(mudarSenhaRequest.senhaNova()));
+        usuarioRepository.save(u);
+    }
+
+    public void apagar(String usuario) {
+        log.info("Apagando {}", usuario);
+        Usuario u = getUsuario(usuario);
+        usuarioRepository.delete(u);
     }
 }

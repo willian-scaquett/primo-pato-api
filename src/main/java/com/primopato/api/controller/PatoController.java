@@ -5,6 +5,7 @@ import com.primopato.api.record.DropDownResponse;
 import com.primopato.api.record.PatoContadorResponse;
 import com.primopato.api.record.PatoRequest;
 import com.primopato.api.record.PatoResponse;
+import com.primopato.api.service.MissaoInfoService;
 import com.primopato.api.service.PatoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,13 +24,16 @@ import java.util.stream.Stream;
 @RequestMapping("pato")
 public class PatoController {
 
+    private final MissaoInfoService missaoInfoService;
     private final PatoService patoService;
 
     @Operation(summary = "Endpoint para cadastro de pato")
     @ApiResponse(responseCode = "201", description = "Pato cadastrado com sucesso")
     @PostMapping("/cadastrar")
     public ResponseEntity<PatoResponse> cadastrarPato(Authentication authentication, @Valid @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PatoResponse(patoService.cadastrar(patoRequest, authentication.getName())));
+        PatoResponse response = new PatoResponse(patoService.cadastrar(patoRequest, authentication.getName()));
+        missaoInfoService.obterOuCriarMissaoInfo(response.id(), authentication.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(summary = "Endpoint para edição de pato")
@@ -37,7 +41,9 @@ public class PatoController {
     @ApiResponse(responseCode = "404", description = "Pato não encontrado para o usuário")
     @PutMapping("/editar/{id}")
     public ResponseEntity<PatoResponse> editarPato(Authentication authentication, @PathVariable Long id, @Valid @RequestBody PatoRequest patoRequest) {
-        return ResponseEntity.ok(new PatoResponse(patoService.editar(id, patoRequest, authentication.getName())));
+        PatoResponse response = new PatoResponse(patoService.editar(id, patoRequest, authentication.getName()));
+        missaoInfoService.obterOuCriarMissaoInfo(id, authentication.getName());
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Endpoint para apagar pato")
@@ -93,7 +99,7 @@ public class PatoController {
     @Operation(summary = "Endpoint para exibir quantos patos capturados e não capturados o usuário tem")
     @ApiResponse(responseCode = "200", description = "Quantidades de patos carregadas com sucesso")
     @GetMapping("/estatistica")
-    public ResponseEntity<List<PatoContadorResponse>> buscarQuantidadePatosCapturadosENaoCapturados(Authentication authentication) {
+    public ResponseEntity<PatoContadorResponse> buscarQuantidadePatosCapturadosENaoCapturados(Authentication authentication) {
         return ResponseEntity.ok(
                 patoService.buscarQuantidadePatosCapturadosENaoCapturados(authentication.getName())
         );
