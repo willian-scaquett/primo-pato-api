@@ -1,5 +1,5 @@
 # Etapa 1: Build
-FROM maven:3.9.9-eclipse-temurin-21 AS builder
+FROM maven:3.9.3-eclipse-temurin-21-alpin AS builder
 WORKDIR /app
 
 # Copia os arquivos do projeto
