@@ -10,5 +10,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - EMAIL_KEY=${EMAIL_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
+    env_file:
+      - ./env
     ports:
       - "8888:8888"
