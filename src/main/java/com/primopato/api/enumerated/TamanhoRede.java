@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 public enum TamanhoRede {
+    //Sem segredos. É como escolher uma roupa: precisa caber, mas não pode ser larga demais (ele poderia escapar
+    //pelos buraquinhos).
     PEQUENA("Pequena", new BigDecimal(100), 0, 1000),
     MEDIA("Média", new BigDecimal(200), 1000, 2000),
     GRANDE("Grande", new BigDecimal(300), 2000, 5000),

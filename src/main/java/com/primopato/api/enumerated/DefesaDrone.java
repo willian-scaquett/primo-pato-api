@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 public enum DefesaDrone {
+    //Cada defesa e seu respectivo valor em patocoins
     REVESTIMENTO_HIDROFOBICO("Revestimento Hidrofóbico", new BigDecimal(500)),
     CERAMICA_REFRATARIA("Cerâmica Refratária", new BigDecimal(800)),
     ISOLAMENTO_GRAFENO("Isolamento de Grafeno", new BigDecimal(1000)),

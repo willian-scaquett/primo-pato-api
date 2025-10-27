@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Abordagem {
-    FURTIVO("Furtivo"),
-    COMEDIDO("Comedido"),
-    COMBATIVO("Combativo");
+    FURTIVO("Furtivo"), //Cancelador de ruídos no modo turbo.
+    COMEDIDO("Comedido"), //Cancelador de ruídos ligado.
+    COMBATIVO("Combativo"); //Cancelador de ruídos desligado. Toda energia no combate.
 
     private final String nome;
 }
