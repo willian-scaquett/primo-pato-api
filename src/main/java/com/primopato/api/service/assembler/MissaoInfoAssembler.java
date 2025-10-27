@@ -65,7 +65,7 @@ public class MissaoInfoAssembler {
             }
 
             if (tipoSuperPoder.equals(TipoSuperPoder.TELETRANSPORTE) || tipoSuperPoder.equals(TipoSuperPoder.VELOCIDADE)) {
-                //Deslocamento é sua maior virtude. Como lidar com isso? Atingindo a maior.
+                //Deslocamento é sua maior virtude. Como lidar com isso? Atingindo a maior
                 //área possível com uma onda de choque
                 return ArmaDrone.ONDA_CHOQUE;
             }

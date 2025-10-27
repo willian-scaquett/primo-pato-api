@@ -49,10 +49,10 @@ public record PatoRequest(
                 pato.getDroneQueEncontrou().getModelo().getNome(),
                 pato.getDroneQueEncontrou().getModelo().getFabricante().getNome(),
                 pato.getDroneQueEncontrou().getModelo().getFabricante().getPais().getNome(),
-                LocalizacaoUtils.EUA.equals(pato.getDroneQueEncontrou().getModelo().getFabricante().getPais())
+                pato.getDroneQueEncontrou().getModelo().getFabricante().getPais().equals(LocalizacaoUtils.EUA)
                         ? UnidadesUtils.centimetroParaPe(pato.getAltura())
                         : pato.getAltura(),
-                LocalizacaoUtils.EUA.equals(pato.getDroneQueEncontrou().getModelo().getFabricante().getPais())
+                pato.getDroneQueEncontrou().getModelo().getFabricante().getPais().equals(LocalizacaoUtils.EUA)
                         ? UnidadesUtils.gramaParaLibra(pato.getPeso())
                         : pato.getPeso(),
                 pato.getLocalizacao().getCoordenadas().getLatitude(),
