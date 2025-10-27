@@ -11,6 +11,6 @@ services:
       - EMAIL_KEY=${EMAIL_KEY}
       - EMAIL_FROM=${EMAIL_FROM}
     env_file:
-      - ./env
+      - .env
     ports:
       - "8888:8888"
