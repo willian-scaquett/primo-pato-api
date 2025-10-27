@@ -26,10 +26,10 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }} 
-          source: "target/*.jar,docker-compose.yml,Dockerfile,.env"
+          source: "target/*.jar,docker-compose.yml,Dockerfile"
           target: "~/app"
           strip_components: 0
-      
+
       - name: Deploy Docker Compose na VM
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -38,6 +38,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/app
+            echo "==== Criando .env ===="
+            cat <<EOF > .env
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            EOF
+
             echo "==== Subindo container via Docker Compose ===="
             sudo docker-compose down || true
             sudo docker-compose up -d --build
