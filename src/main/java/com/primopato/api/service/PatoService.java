@@ -5,6 +5,7 @@ import com.primopato.api.entity.Pato;
 import com.primopato.api.enumerated.EstadoHibernacao;
 import com.primopato.api.record.PatoContadorResponse;
 import com.primopato.api.record.PatoRequest;
+import com.primopato.api.repository.MissaoInfoRepository;
 import com.primopato.api.repository.PatoRepository;
 import com.primopato.api.service.assembler.PatoAssembler;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PatoService {
 
     private final PatoRepository patoRepository;
+    private final MissaoInfoRepository missaoInfoRepository;
     private final PatoAssembler patoAssembler;
     private final DroneService droneService;
     private final LocalizacaoService localizacaoService;
@@ -89,7 +91,13 @@ public class PatoService {
         return patoRepository.save(pato);
     }
 
-    public List<PatoContadorResponse> buscarQuantidadePatosCapturadosENaoCapturados(String usuario) {
-        return patoRepository.contarPatosPorStatusCaptura(usuario);
+    public PatoContadorResponse buscarQuantidadePatosCapturadosENaoCapturados(String usuario) {
+        log.info("Buscando estatíticas de patos do usuário {}", usuario);
+        return new PatoContadorResponse(
+                patoRepository.contarPatosCapturados(usuario),
+                patoRepository.contarPatosNaoCapturados(usuario),
+                missaoInfoRepository.avgGanhoCientificoPorUsuario(usuario),
+                missaoInfoRepository.avgGanhoParanormalPorUsuario(usuario)
+        );
     }
 }

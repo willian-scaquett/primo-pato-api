@@ -1,10 +1,7 @@
 package com.primopato.api.controller;
 
 import com.primopato.api.entity.Usuario;
-import com.primopato.api.record.CadastroUsuarioRequest;
-import com.primopato.api.record.EsqueciSenhaRequest;
-import com.primopato.api.record.LoginRequest;
-import com.primopato.api.record.LoginResponse;
+import com.primopato.api.record.*;
 import com.primopato.api.security.JwtUtil;
 import com.primopato.api.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -55,8 +53,41 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Nova senha enviada para o e-mail cadastrado")
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     @PostMapping("/esqueci-senha")
-    public ResponseEntity<String> esqueciSenha(@RequestBody @Valid EsqueciSenhaRequest esqueciSenhaRequest) {
+    public ResponseEntity<Response> esqueciSenha(@RequestBody @Valid EsqueciSenhaRequest esqueciSenhaRequest) {
         usuarioService.resetarSenha(esqueciSenhaRequest.email());
-        return ResponseEntity.ok("Nova senha enviada para o e-mail cadastrado");
+        return ResponseEntity.ok(new Response("Nova senha enviada para o e-mail cadastrado"));
+    }
+
+    @Operation(summary = "Endpoint para buscar nome do usuário")
+    @ApiResponse(responseCode = "200", description = "Nova senha enviada para o e-mail cadastrado")
+    @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    @GetMapping("/eu")
+    public ResponseEntity<Response> eu(Authentication authentication) {
+        return ResponseEntity.ok(new Response(
+                usuarioService.getUsuario(authentication.getName()).getNome())
+        );
+    }
+
+    @Operation(summary = "Endpoint para alterar senha")
+    @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso")
+    @ApiResponse(responseCode = "401", description = "Senha atual inválida")
+    @PostMapping("/mudar-senha")
+    public ResponseEntity<Response> mudarSenha(Authentication authentication, @RequestBody @Valid MudarSenhaRequest mudarSenhaRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authentication.getName(),
+                        mudarSenhaRequest.senhaAtual()
+                )
+        );
+        usuarioService.mudarSenha(authentication.getName(), mudarSenhaRequest);
+        return ResponseEntity.ok(new Response("Senha alterada com sucesso."));
+    }
+
+    @Operation(summary = "Endpoint para apagar usuário")
+    @ApiResponse(responseCode = "204", description = "Usuário apagado com sucesso")
+    @DeleteMapping("/apagar")
+    public ResponseEntity<Response> apagar(Authentication authentication) {
+        usuarioService.apagar(authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 }

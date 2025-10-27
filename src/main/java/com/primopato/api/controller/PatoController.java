@@ -93,7 +93,7 @@ public class PatoController {
     @Operation(summary = "Endpoint para exibir quantos patos capturados e não capturados o usuário tem")
     @ApiResponse(responseCode = "200", description = "Quantidades de patos carregadas com sucesso")
     @GetMapping("/estatistica")
-    public ResponseEntity<List<PatoContadorResponse>> buscarQuantidadePatosCapturadosENaoCapturados(Authentication authentication) {
+    public ResponseEntity<PatoContadorResponse> buscarQuantidadePatosCapturadosENaoCapturados(Authentication authentication) {
         return ResponseEntity.ok(
                 patoService.buscarQuantidadePatosCapturadosENaoCapturados(authentication.getName())
         );

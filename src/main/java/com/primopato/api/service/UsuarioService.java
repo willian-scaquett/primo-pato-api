@@ -2,8 +2,10 @@ package com.primopato.api.service;
 
 import com.primopato.api.entity.Usuario;
 import com.primopato.api.record.CadastroUsuarioRequest;
+import com.primopato.api.record.MudarSenhaRequest;
 import com.primopato.api.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -81,5 +83,18 @@ public class UsuarioService {
         }
 
         return new String(caracteres);
+    }
+
+    public void mudarSenha(String usuario, @Valid MudarSenhaRequest mudarSenhaRequest) {
+        log.info("Mudando senha do {}", usuario);
+        Usuario u = getUsuario(usuario);
+        u.setSenha(passwordEncoder.encode(mudarSenhaRequest.senhaNova()));
+        usuarioRepository.save(u);
+    }
+
+    public void apagar(String usuario) {
+        log.info("Apagando {}", usuario);
+        Usuario u = getUsuario(usuario);
+        usuarioRepository.delete(u);
     }
 }
