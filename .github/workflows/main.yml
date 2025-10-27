@@ -41,7 +41,7 @@ jobs:
             echo "==== Criando .env ===="
             cat <<EOF > .env
             DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=987654321Qa@
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             EMAIL_KEY=${{ secrets.EMAIL_KEY }}
             EMAIL_FROM=${{ secrets.EMAIL_FROM }}
             EOF
