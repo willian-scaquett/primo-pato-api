@@ -12,8 +12,12 @@
 - Lombok
 - JWT
 
-## Passos para executar a aplicação
+## Passos para executar a aplicação com Docker
+* docker compose -f docker-compose.yml -p primo-pato-api up -d
+Para parar
+* docker compose -f docker-compose.yml -p primo-pato-api stop
 
+## Passos para executar a aplicação com Maven
 ### Build API e instalação de dependências
 * ./mvnw clean package install
 
