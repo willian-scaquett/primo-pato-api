@@ -1,4 +1,4 @@
-package com.primopato.api.service.exception;
+package com.primopato.api.exception;
 
 import com.primopato.api.exception.GlobalExceptionHandler;
 import jakarta.persistence.EntityNotFoundException;

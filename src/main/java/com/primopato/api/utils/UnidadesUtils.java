@@ -9,12 +9,12 @@ public class UnidadesUtils {
 
     public static Float peParaCentimetro(Float medida) {
         // 1 pé = 30,48 centímetros
-        return medida * 30.48f;
+        return medida * FATOR_CONVERSAO_PE;
     }
 
     public static Float centimetroParaPe(Float medida) {
         // 1 pé = 30,48 centímetros
-        return medida / 30.48f;
+        return medida / FATOR_CONVERSAO_PE;
     }
 
     public static Float libraParaGrama(Float medida) {

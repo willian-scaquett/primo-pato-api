@@ -1,4 +1,4 @@
-package com.primopato.api.service.record;
+package com.primopato.api.record;
 
 import com.primopato.api.record.MissaoInfoResponse;
 import org.junit.jupiter.api.Test;

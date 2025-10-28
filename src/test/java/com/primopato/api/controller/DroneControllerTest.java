@@ -1,4 +1,4 @@
-package com.primopato.api.service.controller;
+package com.primopato.api.controller;
 
 import com.primopato.api.controller.DroneController;
 import com.primopato.api.entity.Drone;

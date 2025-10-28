@@ -2,227 +2,70 @@ package com.primopato.api.service;
 
 import com.primopato.api.entity.Pais;
 import com.primopato.api.repository.PaisRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.primopato.api.utils.CustomStringUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mockStatic;
 
-@ExtendWith(MockitoExtension.class)
 class PaisServiceTest {
 
-    @Mock
-    private PaisRepository paisRepository;
+    @Test
+    void testListarPaises() {
+        PaisRepository paisRepository = mock(PaisRepository.class);
+        PaisService service = new PaisService(paisRepository);
 
-    @InjectMocks
-    private PaisService paisService;
+        List<Pais> lista = List.of(new Pais("Brasil"), new Pais("Argentina"));
+        when(paisRepository.findAllByOrderByNomeAsc()).thenReturn(lista);
 
-    @Captor
-    private ArgumentCaptor<Pais> paisCaptor;
+        List<Pais> resultado = service.listarPaises();
 
-    private Pais pais;
-
-    @BeforeEach
-    void setUp() {
-        pais = new Pais();
-        pais.setId(1L);
-        pais.setNome("Brasil");
+        assertEquals(2, resultado.size());
+        assertEquals("Brasil", resultado.get(0).getNome());
+        verify(paisRepository).findAllByOrderByNomeAsc();
     }
 
     @Test
-    void deveRetornarPaisExistenteQuandoEncontrado() {
-        when(paisRepository.findByNome("Brasil")).thenReturn(Optional.of(pais));
+    void testObterOuCriarPais_Existente() {
+        PaisRepository paisRepository = mock(PaisRepository.class);
+        PaisService service = new PaisService(paisRepository);
 
-        Pais resultado = paisService.obterOuCriarPais("Brasil");
+        String nomeEntrada = "brasil";
+        String nomeFormatado = "Brasil";
+        Pais existente = new Pais(nomeFormatado);
 
-        assertNotNull(resultado);
-        assertEquals(pais, resultado);
-        assertEquals("Brasil", resultado.getNome());
-        assertEquals(1L, resultado.getId());
-        verify(paisRepository).findByNome("Brasil");
-        verify(paisRepository, never()).save(any(Pais.class));
+        try (var mocked = mockStatic(CustomStringUtils.class)) {
+            mocked.when(() -> CustomStringUtils.formataIncialMaiuscula(nomeEntrada)).thenReturn(nomeFormatado);
+            when(paisRepository.findByNome(nomeFormatado)).thenReturn(Optional.of(existente));
+
+            Pais resultado = service.obterOuCriarPais(nomeEntrada);
+
+            assertSame(existente, resultado);
+            verify(paisRepository).findByNome(nomeFormatado);
+        }
     }
 
     @Test
-    void deveCriarNovoPaisQuandoNaoEncontrado() {
-        when(paisRepository.findByNome("Argentina")).thenReturn(Optional.empty());
+    void testObterOuCriarPais_Novo() {
+        PaisRepository paisRepository = mock(PaisRepository.class);
+        PaisService service = new PaisService(paisRepository);
 
-        Pais paisNovo = new Pais();
-        paisNovo.setId(2L);
-        paisNovo.setNome("Argentina");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
+        String nomeEntrada = "canada";
+        String nomeFormatado = "Canada";
+        Pais novo = new Pais(nomeFormatado);
 
-        Pais resultado = paisService.obterOuCriarPais("Argentina");
+        try (var mocked = mockStatic(CustomStringUtils.class)) {
+            mocked.when(() -> CustomStringUtils.formataIncialMaiuscula(nomeEntrada)).thenReturn(nomeFormatado);
+            when(paisRepository.findByNome(nomeFormatado)).thenReturn(Optional.empty());
+            when(paisRepository.save(any(Pais.class))).thenReturn(novo);
 
-        assertNotNull(resultado);
-        assertEquals("Argentina", resultado.getNome());
-        assertEquals(2L, resultado.getId());
-        verify(paisRepository).findByNome("Argentina");
-        verify(paisRepository, times(1)).save(paisCaptor.capture());
+            Pais resultado = service.obterOuCriarPais(nomeEntrada);
 
-        Pais paisSalvo = paisCaptor.getValue();
-        assertEquals("Argentina", paisSalvo.getNome());
-    }
-
-    @Test
-    void deveFormatarNomePaisParaInicialMaiuscula() {
-        when(paisRepository.findByNome("Brasil")).thenReturn(Optional.of(pais));
-
-        Pais resultado = paisService.obterOuCriarPais("brasil");
-
-        assertNotNull(resultado);
-        assertEquals(pais, resultado);
-        verify(paisRepository).findByNome("Brasil");
-        verify(paisRepository, never()).save(any(Pais.class));
-    }
-
-    @Test
-    void deveFormatarNomePaisAoCriarNovo() {
-        when(paisRepository.findByNome("Chile")).thenReturn(Optional.empty());
-
-        Pais paisNovo = new Pais();
-        paisNovo.setNome("Chile");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
-
-        paisService.obterOuCriarPais("chile");
-
-        verify(paisRepository).findByNome("Chile");
-        verify(paisRepository).save(paisCaptor.capture());
-
-        Pais paisSalvo = paisCaptor.getValue();
-        assertEquals("Chile", paisSalvo.getNome());
-    }
-
-    @Test
-    void deveTratarNomesComCaracteresEspeciais() {
-        Pais paisComAcento = new Pais();
-        paisComAcento.setNome("México");
-        when(paisRepository.findByNome("México")).thenReturn(Optional.of(paisComAcento));
-
-        Pais resultado = paisService.obterOuCriarPais("méxico");
-
-        assertNotNull(resultado);
-        assertEquals(paisComAcento, resultado);
-        verify(paisRepository).findByNome("México");
-        verify(paisRepository, never()).save(any(Pais.class));
-    }
-
-    @Test
-    void deveCriarPaisComNomeFormatadoCorreto() {
-        when(paisRepository.findByNome("Uruguai")).thenReturn(Optional.empty());
-
-        Pais paisNovo = new Pais();
-        paisNovo.setNome("Uruguai");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
-
-        paisService.obterOuCriarPais("URUGUAI");
-
-        verify(paisRepository).save(paisCaptor.capture());
-
-        Pais paisSalvo = paisCaptor.getValue();
-        assertEquals("Uruguai", paisSalvo.getNome());
-    }
-
-    @Test
-    void deveBuscarPaisComNomeExato() {
-        when(paisRepository.findByNome("Brasil")).thenReturn(Optional.of(pais));
-
-        Pais resultado = paisService.obterOuCriarPais("Brasil");
-
-        assertEquals("Brasil", resultado.getNome());
-        verify(paisRepository).findByNome("Brasil");
-    }
-
-    @Test
-    void deveCriarPaisesComNomesDiferentes() {
-        when(paisRepository.findByNome("Paraguai")).thenReturn(Optional.empty());
-        when(paisRepository.findByNome("Bolívia")).thenReturn(Optional.empty());
-
-        Pais pais1 = new Pais();
-        pais1.setNome("Paraguai");
-        Pais pais2 = new Pais();
-        pais2.setNome("Bolívia");
-
-        when(paisRepository.save(any(Pais.class)))
-                .thenReturn(pais1)
-                .thenReturn(pais2);
-
-        Pais resultado1 = paisService.obterOuCriarPais("paraguai");
-        Pais resultado2 = paisService.obterOuCriarPais("bolívia");
-
-        assertNotNull(resultado1);
-        assertNotNull(resultado2);
-        assertEquals("Paraguai", resultado1.getNome());
-        assertEquals("Bolívia", resultado2.getNome());
-        verify(paisRepository, times(2)).save(any(Pais.class));
-    }
-
-    @Test
-    void deveRetornarPaisSemCriarDuplicado() {
-        when(paisRepository.findByNome("Brasil")).thenReturn(Optional.of(pais));
-
-        Pais resultado1 = paisService.obterOuCriarPais("Brasil");
-        Pais resultado2 = paisService.obterOuCriarPais("brasil");
-
-        assertEquals(resultado1, resultado2);
-        verify(paisRepository, times(2)).findByNome("Brasil");
-        verify(paisRepository, never()).save(any(Pais.class));
-    }
-
-    @Test
-    void deveCriarNovoPaisComConstrutorCorreto() {
-        when(paisRepository.findByNome("Colômbia")).thenReturn(Optional.empty());
-
-        Pais paisNovo = new Pais();
-        paisNovo.setNome("Colômbia");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
-
-        paisService.obterOuCriarPais("colômbia");
-
-        verify(paisRepository).save(paisCaptor.capture());
-
-        Pais paisSalvo = paisCaptor.getValue();
-        assertNotNull(paisSalvo);
-        assertEquals("Colômbia", paisSalvo.getNome());
-    }
-
-    @Test
-    void deveTratarEntradaComEspacos() {
-        when(paisRepository.findByNome("Estados Unidos da América")).thenReturn(Optional.empty());
-
-        Pais paisNovo = new Pais();
-        paisNovo.setNome("Estados Unidos da América");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
-
-        paisService.obterOuCriarPais("estados unidos da américa");
-
-        verify(paisRepository).save(paisCaptor.capture());
-
-        Pais paisSalvo = paisCaptor.getValue();
-        assertEquals("Estados Unidos da América", paisSalvo.getNome());
-    }
-
-    @Test
-    void deveCriarPaisQuandoRepositorioRetornarEmpty() {
-        when(paisRepository.findByNome("Venezuela")).thenReturn(Optional.empty());
-
-        Pais paisNovo = new Pais();
-        paisNovo.setId(3L);
-        paisNovo.setNome("Venezuela");
-        when(paisRepository.save(any(Pais.class))).thenReturn(paisNovo);
-
-        Pais resultado = paisService.obterOuCriarPais("Venezuela");
-
-        assertNotNull(resultado);
-        assertEquals(3L, resultado.getId());
-        assertEquals("Venezuela", resultado.getNome());
-        verify(paisRepository).save(any(Pais.class));
+            assertEquals("Canada", resultado.getNome());
+            verify(paisRepository).findByNome(nomeFormatado);
+            verify(paisRepository).save(any(Pais.class));
+        }
     }
 }

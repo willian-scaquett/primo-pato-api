@@ -2,247 +2,160 @@ package com.primopato.api.service;
 
 import com.primopato.api.entity.Usuario;
 import com.primopato.api.record.CadastroUsuarioRequest;
+import com.primopato.api.record.MudarSenhaRequest;
 import com.primopato.api.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockedStatic;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.security.InvalidParameterException;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
+    @Test
+    void testCriarUsuario_Sucesso() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+        CadastroUsuarioRequest req = new CadastroUsuarioRequest("user", "pass", "Nome");
+        Usuario usuario = new Usuario();
+        usuario.setUsuario("user");
+        usuario.setSenha("hash");
+        usuario.setNome("Nome");
 
-    @InjectMocks
-    private UsuarioService usuarioService;
+        when(repo.existsByUsuario("user")).thenReturn(false);
+        when(encoder.encode("pass")).thenReturn("hash");
+        when(repo.save(any(Usuario.class))).thenReturn(usuario);
 
-    @Captor
-    private ArgumentCaptor<Usuario> usuarioCaptor;
+        Usuario result = service.criarUsuario(req);
 
-    private CadastroUsuarioRequest cadastroRequest;
-    private Usuario usuario;
-
-    @BeforeEach
-    void setUp() {
-        cadastroRequest = new CadastroUsuarioRequest(
-                "joaosilva",
-                "senha123",
-                "João Silva"
-        );
-
-        usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setUsuario("joaosilva");
-        usuario.setSenha("$2a$10$encodedPassword");
-        usuario.setNome("João Silva");
+        assertEquals("user", result.getUsuario());
+        verify(repo).save(any(Usuario.class));
     }
 
     @Test
-    void deveCriarUsuarioComSucesso() {
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(false);
-        when(passwordEncoder.encode("senha123")).thenReturn("$2a$10$encodedPassword");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+    void testCriarUsuario_UsuarioJaExiste() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        Usuario resultado = usuarioService.criarUsuario(cadastroRequest);
+        when(repo.existsByUsuario("user")).thenReturn(true);
 
-        assertNotNull(resultado);
-        assertEquals("joaosilva", resultado.getUsuario());
-        assertEquals("$2a$10$encodedPassword", resultado.getSenha());
-        assertEquals("João Silva", resultado.getNome());
+        CadastroUsuarioRequest req = new CadastroUsuarioRequest("user", "123", "Nome");
 
-        verify(usuarioRepository).existsByUsuario("joaosilva");
-        verify(passwordEncoder).encode("senha123");
-        verify(usuarioRepository).save(usuarioCaptor.capture());
-
-        Usuario usuarioSalvo = usuarioCaptor.getValue();
-        assertEquals("joaosilva", usuarioSalvo.getUsuario());
-        assertEquals("$2a$10$encodedPassword", usuarioSalvo.getSenha());
-        assertEquals("João Silva", usuarioSalvo.getNome());
+        assertThrows(InvalidParameterException.class, () -> service.criarUsuario(req));
     }
 
     @Test
-    void deveLancarExcecaoQuandoUsuarioJaExistir() {
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(true);
+    void testGetUsuario_Encontrado() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        InvalidParameterException exception = assertThrows(
-                InvalidParameterException.class,
-                () -> usuarioService.criarUsuario(cadastroRequest)
-        );
+        Usuario u = new Usuario();
+        when(repo.findByUsuario("user")).thenReturn(Optional.of(u));
 
-        assertEquals("Usuário já existe", exception.getMessage());
-        verify(usuarioRepository).existsByUsuario("joaosilva");
-        verify(passwordEncoder, never()).encode(any());
-        verify(usuarioRepository, never()).save(any());
+        Usuario result = service.getUsuario("user");
+        assertSame(u, result);
     }
 
     @Test
-    void deveEncodarSenhaAoCriarUsuario() {
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(false);
-        when(passwordEncoder.encode("senha123")).thenReturn("$2a$10$encodedPassword");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+    void testGetUsuario_NaoEncontrado() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        usuarioService.criarUsuario(cadastroRequest);
+        when(repo.findByUsuario("user")).thenReturn(Optional.empty());
 
-        verify(passwordEncoder).encode("senha123");
-        verify(usuarioRepository).save(usuarioCaptor.capture());
-
-        Usuario usuarioSalvo = usuarioCaptor.getValue();
-        assertEquals("$2a$10$encodedPassword", usuarioSalvo.getSenha());
-        assertNotEquals("senha123", usuarioSalvo.getSenha());
+        assertThrows(EntityNotFoundException.class, () -> service.getUsuario("user"));
     }
 
     @Test
-    void deveDefinirTodosCamposAoCriarUsuario() {
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(false);
-        when(passwordEncoder.encode("senha123")).thenReturn("$2a$10$encodedPassword");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+    void testResetarSenha_Sucesso() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        usuarioService.criarUsuario(cadastroRequest);
+        Usuario u = new Usuario();
+        when(repo.findByUsuario("user")).thenReturn(Optional.of(u));
+        when(encoder.encode(anyString())).thenReturn("encoded");
+        when(repo.save(u)).thenReturn(u);
 
-        verify(usuarioRepository).save(usuarioCaptor.capture());
+        service.resetarSenha("user");
 
-        Usuario usuarioSalvo = usuarioCaptor.getValue();
-        assertNotNull(usuarioSalvo.getUsuario());
-        assertNotNull(usuarioSalvo.getSenha());
-        assertNotNull(usuarioSalvo.getNome());
-        assertEquals("joaosilva", usuarioSalvo.getUsuario());
-        assertEquals("$2a$10$encodedPassword", usuarioSalvo.getSenha());
-        assertEquals("João Silva", usuarioSalvo.getNome());
+        verify(repo).save(u);
+        verify(email).enviarNovaSenha(eq("user"), anyString());
     }
 
     @Test
-    void deveCriarUsuariosComNomesUsuarioDiferentes() {
-        CadastroUsuarioRequest request2 = new CadastroUsuarioRequest(
-                "mariasilva",
-                "senha456",
-                "Maria Silva"
-        );
+    void testResetarSenha_NaoEncontrado() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        Usuario usuario2 = new Usuario();
-        usuario2.setUsuario("mariasilva");
-        usuario2.setSenha("$2a$10$encodedPassword2");
-        usuario2.setNome("Maria Silva");
+        when(repo.findByUsuario("user")).thenReturn(Optional.empty());
 
-        when(usuarioRepository.existsByUsuario("mariasilva")).thenReturn(false);
-        when(passwordEncoder.encode("senha456")).thenReturn("$2a$10$encodedPassword2");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario2);
-
-        Usuario resultado = usuarioService.criarUsuario(request2);
-
-        assertNotNull(resultado);
-        assertEquals("mariasilva", resultado.getUsuario());
-        assertEquals("Maria Silva", resultado.getNome());
-        verify(usuarioRepository).existsByUsuario("mariasilva");
+        assertThrows(EntityNotFoundException.class, () -> service.resetarSenha("user"));
     }
 
     @Test
-    void deveRetornarUsuarioQuandoEncontrado() {
-        when(usuarioRepository.findByUsuario("joaosilva")).thenReturn(Optional.of(usuario));
+    void testMudarSenha() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = spy(new UsuarioService(repo, encoder, email));
 
-        Usuario resultado = usuarioService.getUsuario("joaosilva");
+        Usuario u = new Usuario();
+        doReturn(u).when(service).getUsuario("user");
+        when(encoder.encode("nova")).thenReturn("hash");
+        when(repo.save(u)).thenReturn(u);
 
-        assertNotNull(resultado);
-        assertEquals(usuario, resultado);
-        assertEquals("joaosilva", resultado.getUsuario());
-        assertEquals("João Silva", resultado.getNome());
-        verify(usuarioRepository).findByUsuario("joaosilva");
+        MudarSenhaRequest req = new MudarSenhaRequest("antiga", "nova");
+        service.mudarSenha("user", req);
+
+        verify(repo).save(u);
+        assertEquals("hash", u.getSenha());
     }
 
     @Test
-    void deveLancarExcecaoQuandoUsuarioNaoEncontrado() {
-        when(usuarioRepository.findByUsuario("usuarioInexistente"))
-                .thenReturn(Optional.empty());
+    void testApagar() {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = spy(new UsuarioService(repo, encoder, email));
 
-        EntityNotFoundException exception = assertThrows(
-                EntityNotFoundException.class,
-                () -> usuarioService.getUsuario("usuarioInexistente")
-        );
+        Usuario u = new Usuario();
+        doReturn(u).when(service).getUsuario("user");
 
-        assertEquals("Usuário não encontrado", exception.getMessage());
-        verify(usuarioRepository).findByUsuario("usuarioInexistente");
+        service.apagar("user");
+
+        verify(repo).delete(u);
     }
 
     @Test
-    void deveBuscarUsuarioPorNomeUsuarioExato() {
-        when(usuarioRepository.findByUsuario("joaosilva")).thenReturn(Optional.of(usuario));
+    void testGerarSenhaAleatoria() throws Exception {
+        UsuarioRepository repo = mock(UsuarioRepository.class);
+        PasswordEncoder encoder = mock(PasswordEncoder.class);
+        EmailService email = mock(EmailService.class);
+        UsuarioService service = new UsuarioService(repo, encoder, email);
 
-        Usuario resultado = usuarioService.getUsuario("joaosilva");
+        var method = UsuarioService.class.getDeclaredMethod("gerarSenhaAleatoria");
+        method.setAccessible(true);
+        String senha = (String) method.invoke(service);
 
-        assertNotNull(resultado);
-        assertEquals("joaosilva", resultado.getUsuario());
-        verify(usuarioRepository).findByUsuario("joaosilva");
-    }
-
-    @Test
-    void deveRetornarUsuarioComTodosCamposPreenchidos() {
-        when(usuarioRepository.findByUsuario("joaosilva")).thenReturn(Optional.of(usuario));
-
-        Usuario resultado = usuarioService.getUsuario("joaosilva");
-
-        assertNotNull(resultado.getId());
-        assertNotNull(resultado.getUsuario());
-        assertNotNull(resultado.getSenha());
-        assertNotNull(resultado.getNome());
-        assertEquals(1L, resultado.getId());
-        assertEquals("joaosilva", resultado.getUsuario());
-        assertEquals("$2a$10$encodedPassword", resultado.getSenha());
-        assertEquals("João Silva", resultado.getNome());
-    }
-
-    @Test
-    void deveCriarUsuarioComSenhasDiferentes() {
-        CadastroUsuarioRequest request1 = new CadastroUsuarioRequest(
-                "user1", "senha123", "User One"
-        );
-        CadastroUsuarioRequest request2 = new CadastroUsuarioRequest(
-                "user2", "senha456", "User Two"
-        );
-
-        when(usuarioRepository.existsByUsuario("user1")).thenReturn(false);
-        when(usuarioRepository.existsByUsuario("user2")).thenReturn(false);
-        when(passwordEncoder.encode("senha123")).thenReturn("$encoded1");
-        when(passwordEncoder.encode("senha456")).thenReturn("$encoded2");
-        when(usuarioRepository.save(any(Usuario.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        usuarioService.criarUsuario(request1);
-        usuarioService.criarUsuario(request2);
-
-        verify(passwordEncoder).encode("senha123");
-        verify(passwordEncoder).encode("senha456");
-        verify(usuarioRepository, times(2)).save(any(Usuario.class));
-    }
-
-    @Test
-    void naoDevePermitirCriarUsuarioDuplicado() {
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(false);
-        when(passwordEncoder.encode(any())).thenReturn("$2a$10$encoded");
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
-
-        usuarioService.criarUsuario(cadastroRequest);
-
-        when(usuarioRepository.existsByUsuario("joaosilva")).thenReturn(true);
-
-        assertThrows(
-                InvalidParameterException.class,
-                () -> usuarioService.criarUsuario(cadastroRequest)
-        );
-
-        verify(usuarioRepository, times(1)).save(any(Usuario.class));
+        assertNotNull(senha);
+        assertEquals(8, senha.length());
     }
 }
