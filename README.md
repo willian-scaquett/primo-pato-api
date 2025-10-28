@@ -14,6 +14,7 @@
 
 ## Passos para executar a aplicação com Docker
 * docker compose -f docker-compose.yml -p primo-pato-api up -d
+
 Para parar
 * docker compose -f docker-compose.yml -p primo-pato-api stop
 
